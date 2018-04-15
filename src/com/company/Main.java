@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import static com.company.Texts.*;
-import static com.company.Texts.WRONG_BOARD_SIZE;
 
 public class Main {
 
@@ -40,10 +39,10 @@ public class Main {
         for (int i = 0; i < tab.length; i++) {
             for (int j = 0; j < tab.length; j++) tab[i][j] = 0;
         }
-
+        drawField(columnRowCount, tab);
         do {
             // X=>1 O=>2 default=>0
-            drawField(columnRowCount, tab);
+
             rowNumber = getRowNumber(columnRowCount);
             columnNumber = getColumnNumber(columnRowCount);
             //przenieść do funkcji załaduj do tablicy
@@ -54,8 +53,9 @@ public class Main {
                 System.out.println(NOT_EMPTY_PLACE);
                 continue;
             }
+            drawField(columnRowCount, tab);
             //sprawdzenie
-            shouldPlayAgain = verify(columnRowCount, tab);
+            shouldPlayAgain = verifyIfContinue(columnRowCount, tab);
 
             //ruch "O"
             //drawField(columnRowCount,tab);
@@ -64,37 +64,111 @@ public class Main {
         } while (shouldPlayAgain);
     }
 
-    public static boolean verify(int tableSize, int[][] tab2) {
-        int[] checking = new int[tableSize + 2];
-        //wyzerowanie tablicy
-        for (int i : checking) {
-            checking[i] = 0;
-        }
-        //int[] checking = new int[columnRowCount + 2]; //ilość wierszy + 2 przekątne//
-        for (int i = 0; i < tab2.length; i++) {
-            for (int j = 0; j < tab2.length; j++) {
-                checking[i] += tab2[i][j];
+    public static boolean verifyIfContinue(int columnRowCount, int[][] tab) {
+        if (verifyIfRowIsNotFull(columnRowCount, tab)) {
+            if (verifyIfColumnIsNotFull(columnRowCount, tab)) {
+                if (verifyIfDiagonal_II_IsNotFull(columnRowCount, tab)) {
+                    if (verifyIfDiagonal_JJ_IsNotFull(columnRowCount, tab)) {
+                        return (true);
+                    }
+                }
             }
         }
-        //suma 1-szej przekątnej do tablicy
-        for (int i = 0; i < tab2.length; i++) {
-            checking[tableSize] += tab2[i][i];
+        System.out.println(END_OF_THE_GAME);
+        return (false);
+    }
+    public static boolean verifyIfDiagonal_JJ_IsNotFull(int columnRowCount, int[][] tab) {
+        int[][] checking = new int[1][2];
+        checking[0][0] = 0;
+        checking[0][1] = 0;
+
+        for (int i = 0; i < tab.length; i++) {
+            if (tab[i][columnRowCount-i-1] == 1) checking[0][0] += 1;   // X
+            if (tab[i][columnRowCount-i-1] == 2) checking[0][1] += 1;   // O
         }
-        //suma 2-giej przekątnej do tablicy
-        for (int i = 0; i < tab2.length; i++) {
-            checking[tableSize + 1] += tab2[i][tableSize - 1 - i];
+
+        if (checking[0][0] == columnRowCount) {
+            System.out.println(WINNER_X + DIAGONAL_JJ);
+            return (false);
         }
+        if (checking[0][1] == columnRowCount) {
+            System.out.println(WINNER_O + DIAGONAL_JJ);
+            return (false);
+        }
+        return (true);
+
+    }
+    public static boolean verifyIfDiagonal_II_IsNotFull(int columnRowCount, int[][] tab) {
+        int[][] checking = new int[1][2];
+        checking[0][0] = 0;
+        checking[0][1] = 0;
+
+        for (int i = 0; i < tab.length; i++) {
+            if (tab[i][i] == 1) checking[0][0] += 1;   // X
+            if (tab[i][i] == 2) checking[0][1] += 1;   // O
+        }
+
+        if (checking[0][0] == columnRowCount) {
+            System.out.println(WINNER_X + DIAGONAL_II);
+            return (false);
+        }
+        if (checking[0][1] == columnRowCount) {
+            System.out.println(WINNER_O + DIAGONAL_II);
+            return (false);
+        }
+        return (true);
+
+    }
+    public static boolean verifyIfColumnIsNotFull(int columnRowCount, int[][] tab) {
+        int[][] checking = new int[columnRowCount][2];
         for (int i = 0; i < checking.length; i++) {
-            if (checking[i] != 0) {
-                if ((checking[i] % tableSize == 0)) {
-                    drawField(tableSize, tab2);
-                    System.out.println("index i =" + i);
-                    System.out.println("wartość wiersza i w tablicy " + checking[i]);
-                    System.out.println("wielkość tablicy " + tableSize);
-                    System.out.println("Modulo=" + checking[i] % tableSize);
-                    System.out.println(WINNER_X);
-                    return (false);
-                }
+            for (int j = 0; j < 2; j++) {
+                checking[i][j] = 0;
+            }
+        }
+
+        for (int i = 0; i < tab.length; i++) {
+            for (int j = 0; j < tab.length; j++) {
+                if (tab[j][i] == 1) checking[i][0] += 1;   // X
+                if (tab[j][i] == 2) checking[i][1] += 1;   // O
+            }
+        }
+
+        for (int i = 0; i < checking.length; i++) {
+            if (checking[i][0] == columnRowCount) {
+                System.out.println(WINNER_X + COLUMN + (i + 1));
+                return (false);
+            }
+            if (checking[i][1] == columnRowCount) {
+                System.out.println(WINNER_O + COLUMN + (i + 1));
+                return (false);
+            }
+        }
+        return (true);
+    }
+    public static boolean verifyIfRowIsNotFull(int columnRowCount, int[][] tab) {
+        int[][] checking = new int[columnRowCount][2];
+        for (int i = 0; i < checking.length; i++) {
+            for (int j = 0; j < 2; j++) {
+                checking[i][j] = 0;
+            }
+        }
+
+        for (int i = 0; i < tab.length; i++) {
+            for (int j = 0; j < tab.length; j++) {
+                if (tab[i][j] == 1) checking[i][0] += 1;   // X
+                if (tab[i][j] == 2) checking[i][1] += 1;   // O
+            }
+        }
+
+        for (int i = 0; i < checking.length; i++) {
+            if (checking[i][0] == columnRowCount) {
+                System.out.println(WINNER_X + ROW + (i + 1));
+                return (false);
+            }
+            if (checking[i][1] == columnRowCount) {
+                System.out.println(WINNER_O + ROW + (i + 1));
+                return (false);
             }
         }
         return (true);

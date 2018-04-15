@@ -14,5 +14,11 @@ public class Texts {
     public static final String AGAIN_PLAY = "Czy chcesz zagrać jeszcze raz? Naciśnij T ->tak, lub inny klawisz ->wyjście";
     public static final String PROVIDE_COLUMN = "Podaj kolumnę (a, b, c...) ";
     public static final String NOT_EMPTY_PLACE = "Wybrane miejsce jest już zajęte, spróbuj jeszcze raz";
-    public static final String WINNER_X = "Koniec gry, wygrał \"X\" ";
+    public static final String WINNER_X = "Wygrał \"X\" ";
+    public static final String WINNER_O = "Wyglało \"O\" ";
+    public static final String ROW = "wiersz ";
+    public static final String COLUMN = "kolumna ";
+    public static final String DIAGONAL_II = "przekątna ii";
+    public static final String DIAGONAL_JJ = "przekątna jj";
+    public static final String END_OF_THE_GAME = "Koniec rozgrywki";
 }
