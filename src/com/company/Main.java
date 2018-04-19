@@ -11,6 +11,10 @@ public class Main {
     public static final int MAX_BOARD_SIZE = 9;
     private static final int MIN_BOARD_ID = 1;
     private static final char BAD_SIGN = '@';
+    private static final char YES = 'T';
+    private static final int ItIsO = 2; //oznacza O w tabeli//
+    private static final int ItIsX = 1; //oznacza X w tabeli//
+    private static int boardSize = 0;
 
     private static final Scanner INPUT = new Scanner(System.in);
     private static boolean shouldPlayAgain;
@@ -18,47 +22,47 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         System.out.println(WELCOME);
-        char theEnd = 'T';
+        char notEnd = YES;
         do {
             play();
             System.out.println(AGAIN_PLAY);
-            theEnd = readSign();
-        } while (theEnd == 'T');
+            notEnd = readSign();
+        } while (notEnd == YES);
     }
 
     public static void play() {
         int rowNumber = 0;
         int columnNumber = 0;
-        int columnRowCount = 0;
+
         shouldPlayAgain = true;
 
-        columnRowCount = getPlayingFieldSize(MAX_BOARD_SIZE);
-        System.out.println(CHOOSED + columnRowCount);
+        boardSize = getPlayingFieldSize(MAX_BOARD_SIZE);
+        System.out.println(CHOOSED + boardSize);
 
-        int[][] tab = new int[columnRowCount][columnRowCount];
+        int[][] tab = new int[boardSize][boardSize];
         for (int i = 0; i < tab.length; i++) {
             for (int j = 0; j < tab.length; j++) tab[i][j] = 0;
         }
-        drawField(columnRowCount, tab);
+        drawField(boardSize, tab);
         do {
             // X=>1 O=>2 default=>0
 
-            rowNumber = getRowNumber(columnRowCount);
-            columnNumber = getColumnNumber(columnRowCount);
+            rowNumber = getRowNumber(boardSize);
+            columnNumber = getColumnNumber(boardSize);
             //przenieść do funkcji załaduj do tablicy
             System.out.println(CHOOSED + rowNumber + "/" + columnNumber);
             if (tab[rowNumber - 1][columnNumber - 1] == 0) {
-                tab[rowNumber - 1][columnNumber - 1] = 1;
+                tab[rowNumber - 1][columnNumber - 1] = ItIsX;
             } else {
                 System.out.println(NOT_EMPTY_PLACE);
                 continue;
             }
-            drawField(columnRowCount, tab);
+            drawField(boardSize, tab);
             //sprawdzenie
-            shouldPlayAgain = verifyIfContinue(columnRowCount, tab);
+            shouldPlayAgain = verifyIfContinue(boardSize, tab);
 
             //ruch "O"
-            //drawField(columnRowCount,tab);
+            //drawField(boardSize,tab);
 
 
         } while (shouldPlayAgain);
@@ -67,56 +71,56 @@ public class Main {
     public static boolean verifyIfContinue(int columnRowCount, int[][] tab) {
         if (verifyIfRowIsNotFull(columnRowCount, tab)) {
             if (verifyIfColumnIsNotFull(columnRowCount, tab)) {
-                if (verifyIfDiagonal_II_IsNotFull(columnRowCount, tab)) {
-                    if (verifyIfDiagonal_JJ_IsNotFull(columnRowCount, tab)) {
-                        return (true);
+                if (verifyIfDiagonalXxIsNotFull(columnRowCount, tab)) {
+                    if (verifyIfDiagonalYyIsNotFull(columnRowCount, tab)) {
+                        return true;
                     }
                 }
             }
         }
         System.out.println(END_OF_THE_GAME);
-        return (false);
+        return false;
     }
-    public static boolean verifyIfDiagonal_JJ_IsNotFull(int columnRowCount, int[][] tab) {
+    public static boolean verifyIfDiagonalYyIsNotFull(int columnRowCount, int[][] tab) {
         int[][] checking = new int[1][2];
         checking[0][0] = 0;
         checking[0][1] = 0;
 
         for (int i = 0; i < tab.length; i++) {
-            if (tab[i][columnRowCount-i-1] == 1) checking[0][0] += 1;   // X
-            if (tab[i][columnRowCount-i-1] == 2) checking[0][1] += 1;   // O
+            if (tab[i][columnRowCount-i-1] == ItIsX) checking[0][0] += 1;   // X
+            if (tab[i][columnRowCount-i-1] == ItIsO) checking[0][1] += 1;   // O
         }
 
         if (checking[0][0] == columnRowCount) {
             System.out.println(WINNER_X + DIAGONAL_JJ);
-            return (false);
+            return false;
         }
         if (checking[0][1] == columnRowCount) {
             System.out.println(WINNER_O + DIAGONAL_JJ);
-            return (false);
+            return false;
         }
-        return (true);
+        return true;
 
     }
-    public static boolean verifyIfDiagonal_II_IsNotFull(int columnRowCount, int[][] tab) {
+    public static boolean verifyIfDiagonalXxIsNotFull(int columnRowCount, int[][] tab) {
         int[][] checking = new int[1][2];
         checking[0][0] = 0;
         checking[0][1] = 0;
 
         for (int i = 0; i < tab.length; i++) {
-            if (tab[i][i] == 1) checking[0][0] += 1;   // X
-            if (tab[i][i] == 2) checking[0][1] += 1;   // O
+            if (tab[i][i] == ItIsX) checking[0][0] += 1;   // X
+            if (tab[i][i] == ItIsO) checking[0][1] += 1;   // O
         }
 
         if (checking[0][0] == columnRowCount) {
             System.out.println(WINNER_X + DIAGONAL_II);
-            return (false);
+            return false;
         }
         if (checking[0][1] == columnRowCount) {
             System.out.println(WINNER_O + DIAGONAL_II);
-            return (false);
+            return false;
         }
-        return (true);
+        return true;
 
     }
     public static boolean verifyIfColumnIsNotFull(int columnRowCount, int[][] tab) {
@@ -129,22 +133,22 @@ public class Main {
 
         for (int i = 0; i < tab.length; i++) {
             for (int j = 0; j < tab.length; j++) {
-                if (tab[j][i] == 1) checking[i][0] += 1;   // X
-                if (tab[j][i] == 2) checking[i][1] += 1;   // O
+                if (tab[j][i] == ItIsX) checking[i][0] += 1;   // X
+                if (tab[j][i] == ItIsO) checking[i][1] += 1;   // O
             }
         }
 
         for (int i = 0; i < checking.length; i++) {
             if (checking[i][0] == columnRowCount) {
                 System.out.println(WINNER_X + COLUMN + (i + 1));
-                return (false);
+                return false;
             }
             if (checking[i][1] == columnRowCount) {
                 System.out.println(WINNER_O + COLUMN + (i + 1));
-                return (false);
+                return false;
             }
         }
-        return (true);
+        return true;
     }
     public static boolean verifyIfRowIsNotFull(int columnRowCount, int[][] tab) {
         int[][] checking = new int[columnRowCount][2];
@@ -156,22 +160,22 @@ public class Main {
 
         for (int i = 0; i < tab.length; i++) {
             for (int j = 0; j < tab.length; j++) {
-                if (tab[i][j] == 1) checking[i][0] += 1;   // X
-                if (tab[i][j] == 2) checking[i][1] += 1;   // O
+                if (tab[i][j] == ItIsX) checking[i][0] += 1;   // X
+                if (tab[i][j] == ItIsO) checking[i][1] += 1;   // O
             }
         }
 
         for (int i = 0; i < checking.length; i++) {
             if (checking[i][0] == columnRowCount) {
                 System.out.println(WINNER_X + ROW + (i + 1));
-                return (false);
+                return false;
             }
             if (checking[i][1] == columnRowCount) {
                 System.out.println(WINNER_O + ROW + (i + 1));
-                return (false);
+                return false;
             }
         }
-        return (true);
+        return true;
     }
 
     public static int getPlayingFieldSize(int max) {
@@ -247,10 +251,10 @@ public class Main {
             String lineWithData = " " + (i + 1) + " |";
             for (int j = 0; j < rowCount; j++) {
                 switch (tab2[i][j]) {
-                    case 1:
+                    case ItIsX:
                         lineWithData += " X |";
                         break;
-                    case 2:
+                    case ItIsO:
                         lineWithData += " O |";
                         break;
                     default:
