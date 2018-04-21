@@ -68,11 +68,11 @@ public class Main {
         } while (shouldPlayAgain);
     }
 
-    public static boolean verifyIfContinue(int columnRowCount, int[][] tab) {
-        if (verifyIfRowIsNotFull(columnRowCount, tab)) {
-            if (verifyIfColumnIsNotFull(columnRowCount, tab)) {
-                if (verifyIfDiagonalXxIsNotFull(columnRowCount, tab)) {
-                    if (verifyIfDiagonalYyIsNotFull(columnRowCount, tab)) {
+    public static boolean verifyIfContinue(int boardSize, int[][] tab) {
+        if (verifyIfRowIsNotFull(boardSize, tab)) {
+            if (verifyIfColumnIsNotFull(boardSize, tab)) {
+                if (verifyIfDiagonalXxIsNotFull(boardSize, tab)) {
+                    if (verifyIfDiagonalYyIsNotFull(boardSize, tab)) {
                         return true;
                     }
                 }
@@ -81,28 +81,28 @@ public class Main {
         System.out.println(END_OF_THE_GAME);
         return false;
     }
-    public static boolean verifyIfDiagonalYyIsNotFull(int columnRowCount, int[][] tab) {
+    public static boolean verifyIfDiagonalYyIsNotFull(int boardSize,int[][] tab) {
         int[][] checking = new int[1][2];
         checking[0][0] = 0;
         checking[0][1] = 0;
 
         for (int i = 0; i < tab.length; i++) {
-            if (tab[i][columnRowCount-i-1] == ItIsX) checking[0][0] += 1;   // X
-            if (tab[i][columnRowCount-i-1] == ItIsO) checking[0][1] += 1;   // O
+            if (tab[i][boardSize-i-1] == ItIsX) checking[0][0] += 1;   // X
+            if (tab[i][boardSize-i-1] == ItIsO) checking[0][1] += 1;   // O
         }
 
-        if (checking[0][0] == columnRowCount) {
+        if (checking[0][0] == boardSize) {
             System.out.println(WINNER_X + DIAGONAL_JJ);
             return false;
         }
-        if (checking[0][1] == columnRowCount) {
+        if (checking[0][1] == boardSize) {
             System.out.println(WINNER_O + DIAGONAL_JJ);
             return false;
         }
         return true;
 
     }
-    public static boolean verifyIfDiagonalXxIsNotFull(int columnRowCount, int[][] tab) {
+    public static boolean verifyIfDiagonalXxIsNotFull(int boardSize, int[][] tab) {
         int[][] checking = new int[1][2];
         checking[0][0] = 0;
         checking[0][1] = 0;
@@ -112,19 +112,19 @@ public class Main {
             if (tab[i][i] == ItIsO) checking[0][1] += 1;   // O
         }
 
-        if (checking[0][0] == columnRowCount) {
+        if (checking[0][0] == boardSize) {
             System.out.println(WINNER_X + DIAGONAL_II);
             return false;
         }
-        if (checking[0][1] == columnRowCount) {
+        if (checking[0][1] == boardSize) {
             System.out.println(WINNER_O + DIAGONAL_II);
             return false;
         }
         return true;
 
     }
-    public static boolean verifyIfColumnIsNotFull(int columnRowCount, int[][] tab) {
-        int[][] checking = new int[columnRowCount][2];
+    public static boolean verifyIfColumnIsNotFull(int boardSize, int[][] tab) {
+        int[][] checking = new int[boardSize][2];
         for (int i = 0; i < checking.length; i++) {
             for (int j = 0; j < 2; j++) {
                 checking[i][j] = 0;
@@ -139,19 +139,19 @@ public class Main {
         }
 
         for (int i = 0; i < checking.length; i++) {
-            if (checking[i][0] == columnRowCount) {
+            if (checking[i][0] == boardSize) {
                 System.out.println(WINNER_X + COLUMN + (i + 1));
                 return false;
             }
-            if (checking[i][1] == columnRowCount) {
+            if (checking[i][1] == boardSize) {
                 System.out.println(WINNER_O + COLUMN + (i + 1));
                 return false;
             }
         }
         return true;
     }
-    public static boolean verifyIfRowIsNotFull(int columnRowCount, int[][] tab) {
-        int[][] checking = new int[columnRowCount][2];
+    public static boolean verifyIfRowIsNotFull(int boardSize, int[][] tab) {
+        int[][] checking = new int[boardSize][2];
         for (int i = 0; i < checking.length; i++) {
             for (int j = 0; j < 2; j++) {
                 checking[i][j] = 0;
@@ -166,11 +166,11 @@ public class Main {
         }
 
         for (int i = 0; i < checking.length; i++) {
-            if (checking[i][0] == columnRowCount) {
+            if (checking[i][0] == boardSize) {
                 System.out.println(WINNER_X + ROW + (i + 1));
                 return false;
             }
-            if (checking[i][1] == columnRowCount) {
+            if (checking[i][1] == boardSize) {
                 System.out.println(WINNER_O + ROW + (i + 1));
                 return false;
             }
