@@ -14,6 +14,8 @@ public class Main {
     private static final char YES = 'T';
     private static final int ItIsO = 2; //oznacza O w tabeli//
     private static final int ItIsX = 1; //oznacza X w tabeli//
+    private static final String WIN_OUTPUT_FORMAT = "%s %s %d\n";
+
     private static final Scanner INPUT = new Scanner(System.in);
     private static int boardSize = 0;
     private static boolean shouldPlayAgain;
@@ -38,11 +40,18 @@ public class Main {
         boardSize = getPlayingFieldSize(MAX_BOARD_SIZE);
         System.out.println(CHOOSED + boardSize);
 
-        int[][] tab = new int[boardSize][boardSize];
-        for (int i = 0; i < tab.length; i++) {
-            for (int j = 0; j < tab.length; j++) tab[i][j] = 0;
+        final PlayerSignType[][] board = new PlayerSignType[boardSize][boardSize];
+        for (PlayerSignType[] signRow : board) {
+            for (PlayerSignType sign : signRow) {
+                sign = PlayerSignType.EMPTY;
+            }
         }
-        drawField(boardSize, tab);
+//        for (int i = 0; i < board.length; i++) {
+//            for (int j = 0; j < board.length; j++) {
+//                board[i][j] = PlayerSignType.EMPTY;
+//            }
+//        }
+        drawField(boardSize, board);
         do {
             // X=>1 O=>2 default=>0
 
@@ -50,35 +59,29 @@ public class Main {
             columnNumber = getColumnNumber(boardSize);
             //przenieść do funkcji załaduj do tablicy
             System.out.println(CHOOSED + rowNumber + "/" + columnNumber);
-            if (tab[rowNumber - 1][columnNumber - 1] == 0) {
-                tab[rowNumber - 1][columnNumber - 1] = ItIsX;
+            if (board[rowNumber - 1][columnNumber - 1] == 0) {
+                board[rowNumber - 1][columnNumber - 1] = ItIsX;
             } else {
                 System.out.println(NOT_EMPTY_PLACE);
                 continue;
             }
-            drawField(boardSize, tab);
+            drawField(boardSize, board);
             //sprawdzenie
-            shouldPlayAgain = verifyIfContinue(boardSize, tab);
+            shouldPlayAgain = verifyIfContinue(boardSize, board);
 
             //ruch "O"
             //drawField(boardSize,tab);
 
 
         } while (shouldPlayAgain);
+        System.out.println(END_OF_THE_GAME);
     }
 
-    public static boolean verifyIfContinue(int boardSize, int[][] tab) {
-        if (verifyIfRowIsNotFull(boardSize, tab)) {
-            if (verifyIfColumnIsNotFull(boardSize, tab)) {
-                if (verifyIfDiagonalXxIsNotFull(boardSize, tab)) {
-                    if (verifyIfDiagonalYyIsNotFull(boardSize, tab)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        System.out.println(END_OF_THE_GAME);
-        return false;
+    private static boolean verifyIfContinue(int columnRowCount, int[][] tab) {
+        return verifyIfRowIsNotFull(columnRowCount, tab)
+                && verifyIfColumnIsNotFull(columnRowCount, tab)
+                && verifyIfDiagonalXxIsNotFull(columnRowCount, tab)
+                && verifyIfDiagonalYyIsNotFull(columnRowCount, tab);
     }
 
     public static boolean verifyIfDiagonalYyIsNotFull(int boardSize, int[][] tab) {
@@ -104,7 +107,7 @@ public class Main {
     }
 
     public static boolean verifyIfDiagonalXxIsNotFull(int boardSize, int[][] tab) {
-        int[][] checking = new int[1][2];
+        final int[][] checking = new int[1][2];
         checking[0][0] = 0;
         checking[0][1] = 0;
 
@@ -170,7 +173,8 @@ public class Main {
 
         for (int i = 0; i < checking.length; i++) {
             if (checking[i][0] == boardSize) {
-                System.out.println(WINNER_X + ROW + (i + 1));
+                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, ROW, i + 1);
+//                System.out.println(WINNER_X + ROW + (i + 1));
                 return false;
             }
             if (checking[i][1] == boardSize) {
@@ -240,10 +244,12 @@ public class Main {
     public static void drawField(int rowCount, int[][] tab2) {
 
         System.out.println("");
-        String firstLine = "     ";     // 3 spacje na początku na kolumnę numerów wierszy
+        StringBuilder firstLine = new StringBuilder("     ");     // 3 spacje na początku na kolumnę numerów wierszy
 
-        for (int i = 0; i < rowCount; i++) firstLine += (char) ('a' + i) + " ! ";
-        System.out.println(firstLine);
+        for (int i = 0; i < rowCount; i++) {
+            firstLine.append((char) ('a' + i)).append(" ! ");
+        }
+        System.out.println(firstLine.toString());
 
         String horizontalFullLine = "   ";
         for (int i = 0; i < rowCount * 4 + 1; i++) horizontalFullLine += "-";
