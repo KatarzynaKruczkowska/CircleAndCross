@@ -38,7 +38,7 @@ public class Main {
         shouldPlayAgain = true;
 
         boardSize = getPlayingFieldSize(MAX_BOARD_SIZE);
-        System.out.println(CHOOSED + boardSize);
+        System.out.println(SELECTED + boardSize);
 
         final PlayerSignType[][] board = new PlayerSignType[boardSize][boardSize];
         for (PlayerSignType[] signRow : board) {
@@ -58,7 +58,7 @@ public class Main {
             rowNumber = getRowNumber(boardSize);
             columnNumber = getColumnNumber(boardSize);
             //przenieść do funkcji załaduj do tablicy
-            System.out.println(CHOOSED + rowNumber + "/" + columnNumber);
+            System.out.println(SELECTED + rowNumber + "/" + columnNumber);
             if (board[rowNumber - 1][columnNumber - 1] == 0) {
                 board[rowNumber - 1][columnNumber - 1] = ItIsX;
             } else {
@@ -70,28 +70,28 @@ public class Main {
             shouldPlayAgain = verifyIfContinue(boardSize, board);
 
             //ruch "O"
-            //drawField(boardSize,tab);
+            //drawField(boardSize,board);
 
 
         } while (shouldPlayAgain);
         System.out.println(END_OF_THE_GAME);
     }
 
-    private static boolean verifyIfContinue(int columnRowCount, int[][] tab) {
-        return verifyIfRowIsNotFull(columnRowCount, tab)
-                && verifyIfColumnIsNotFull(columnRowCount, tab)
-                && verifyIfDiagonalXxIsNotFull(columnRowCount, tab)
-                && verifyIfDiagonalYyIsNotFull(columnRowCount, tab);
+    private static boolean verifyIfContinue(int columnRowCount, int[][] board) {
+        return verifyIfRowIsNotFull(columnRowCount, board)
+                && verifyIfColumnIsNotFull(columnRowCount, board)
+                && verifyIfDiagonalXxIsNotFull(columnRowCount, board)
+                && verifyIfDiagonalYyIsNotFull(columnRowCount, board);
     }
 
-    public static boolean verifyIfDiagonalYyIsNotFull(int boardSize, int[][] tab) {
+    public static boolean verifyIfDiagonalYyIsNotFull(int boardSize, int[][] board) {
         int[][] checking = new int[1][2];
         checking[0][0] = 0;
         checking[0][1] = 0;
 
-        for (int i = 0; i < tab.length; i++) {
-            if (tab[i][boardSize - i - 1] == ItIsX) checking[0][0] += 1;   // X
-            if (tab[i][boardSize - i - 1] == ItIsO) checking[0][1] += 1;   // O
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][boardSize - i - 1] == ItIsX) checking[0][0] += 1;   // X
+            if (board[i][boardSize - i - 1] == ItIsO) checking[0][1] += 1;   // O
         }
 
         if (checking[0][0] == boardSize) {
@@ -106,14 +106,14 @@ public class Main {
 
     }
 
-    public static boolean verifyIfDiagonalXxIsNotFull(int boardSize, int[][] tab) {
+    public static boolean verifyIfDiagonalXxIsNotFull(int boardSize, int[][] board) {
         final int[][] checking = new int[1][2];
         checking[0][0] = 0;
         checking[0][1] = 0;
 
-        for (int i = 0; i < tab.length; i++) {
-            if (tab[i][i] == ItIsX) checking[0][0] += 1;   // X
-            if (tab[i][i] == ItIsO) checking[0][1] += 1;   // O
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][i] == ItIsX) checking[0][0] += 1;   // X
+            if (board[i][i] == ItIsO) checking[0][1] += 1;   // O
         }
 
         if (checking[0][0] == boardSize) {
@@ -128,7 +128,7 @@ public class Main {
 
     }
 
-    public static boolean verifyIfColumnIsNotFull(int boardSize, int[][] tab) {
+    public static boolean verifyIfColumnIsNotFull(int boardSize, int[][] board) {
         int[][] checking = new int[boardSize][2];
         for (int i = 0; i < checking.length; i++) {
             for (int j = 0; j < 2; j++) {
@@ -136,10 +136,10 @@ public class Main {
             }
         }
 
-        for (int i = 0; i < tab.length; i++) {
-            for (int j = 0; j < tab.length; j++) {
-                if (tab[j][i] == ItIsX) checking[i][0] += 1;   // X
-                if (tab[j][i] == ItIsO) checking[i][1] += 1;   // O
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[j][i] == ItIsX) checking[i][0] += 1;   // X
+                if (board[j][i] == ItIsO) checking[i][1] += 1;   // O
             }
         }
 
@@ -156,7 +156,7 @@ public class Main {
         return true;
     }
 
-    public static boolean verifyIfRowIsNotFull(int boardSize, int[][] tab) {
+    public static boolean verifyIfRowIsNotFull(int boardSize, int[][] board) {
         int[][] checking = new int[boardSize][2];
         for (int i = 0; i < checking.length; i++) {
             for (int j = 0; j < 2; j++) {
@@ -164,10 +164,10 @@ public class Main {
             }
         }
 
-        for (int i = 0; i < tab.length; i++) {
-            for (int j = 0; j < tab.length; j++) {
-                if (tab[i][j] == ItIsX) checking[i][0] += 1;   // X
-                if (tab[i][j] == ItIsO) checking[i][1] += 1;   // O
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] == ItIsX) checking[i][0] += 1;   // X
+                if (board[i][j] == ItIsO) checking[i][1] += 1;   // O
             }
         }
 
