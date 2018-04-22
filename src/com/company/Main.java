@@ -14,9 +14,8 @@ public class Main {
     private static final char YES = 'T';
     private static final int ItIsO = 2; //oznacza O w tabeli//
     private static final int ItIsX = 1; //oznacza X w tabeli//
-    private static int boardSize = 0;
-
     private static final Scanner INPUT = new Scanner(System.in);
+    private static int boardSize = 0;
     private static boolean shouldPlayAgain;
 
 
@@ -81,14 +80,15 @@ public class Main {
         System.out.println(END_OF_THE_GAME);
         return false;
     }
-    public static boolean verifyIfDiagonalYyIsNotFull(int boardSize,int[][] tab) {
+
+    public static boolean verifyIfDiagonalYyIsNotFull(int boardSize, int[][] tab) {
         int[][] checking = new int[1][2];
         checking[0][0] = 0;
         checking[0][1] = 0;
 
         for (int i = 0; i < tab.length; i++) {
-            if (tab[i][boardSize-i-1] == ItIsX) checking[0][0] += 1;   // X
-            if (tab[i][boardSize-i-1] == ItIsO) checking[0][1] += 1;   // O
+            if (tab[i][boardSize - i - 1] == ItIsX) checking[0][0] += 1;   // X
+            if (tab[i][boardSize - i - 1] == ItIsO) checking[0][1] += 1;   // O
         }
 
         if (checking[0][0] == boardSize) {
@@ -102,6 +102,7 @@ public class Main {
         return true;
 
     }
+
     public static boolean verifyIfDiagonalXxIsNotFull(int boardSize, int[][] tab) {
         int[][] checking = new int[1][2];
         checking[0][0] = 0;
@@ -123,6 +124,7 @@ public class Main {
         return true;
 
     }
+
     public static boolean verifyIfColumnIsNotFull(int boardSize, int[][] tab) {
         int[][] checking = new int[boardSize][2];
         for (int i = 0; i < checking.length; i++) {
@@ -150,6 +152,7 @@ public class Main {
         }
         return true;
     }
+
     public static boolean verifyIfRowIsNotFull(int boardSize, int[][] tab) {
         int[][] checking = new int[boardSize][2];
         for (int i = 0; i < checking.length; i++) {
