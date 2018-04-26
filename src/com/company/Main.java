@@ -46,15 +46,8 @@ public class Main {
                 sign = PlayerSignType.EMPTY;
             }
         }
-//        for (int i = 0; i < board.length; i++) {
-//            for (int j = 0; j < board.length; j++) {
-//                board[i][j] = PlayerSignType.EMPTY;
-//            }
-//        }
         drawField(boardSize, board);
         do {
-            // X=>1 O=>2 default=>0
-
             rowNumber = getRowNumber(boardSize);
             columnNumber = getColumnNumber(boardSize);
             //przenieść do funkcji załaduj do tablicy
@@ -95,11 +88,11 @@ public class Main {
         }
 
         if (checking[0][0] == boardSize) {
-            System.out.println(WINNER_X + DIAGONAL_JJ);
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, DIAGONAL_JJ);
             return false;
         }
         if (checking[0][1] == boardSize) {
-            System.out.println(WINNER_O + DIAGONAL_JJ);
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, DIAGONAL_JJ);
             return false;
         }
         return true;
@@ -117,11 +110,11 @@ public class Main {
         }
 
         if (checking[0][0] == boardSize) {
-            System.out.println(WINNER_X + DIAGONAL_II);
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, DIAGONAL_II);
             return false;
         }
         if (checking[0][1] == boardSize) {
-            System.out.println(WINNER_O + DIAGONAL_II);
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, DIAGONAL_II);
             return false;
         }
         return true;
@@ -145,11 +138,11 @@ public class Main {
 
         for (int i = 0; i < checking.length; i++) {
             if (checking[i][0] == boardSize) {
-                System.out.println(WINNER_X + COLUMN + (i + 1));
+                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, COLUMN, i + 1);
                 return false;
             }
             if (checking[i][1] == boardSize) {
-                System.out.println(WINNER_O + COLUMN + (i + 1));
+                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, COLUMN, i + 1);
                 return false;
             }
         }
@@ -178,7 +171,7 @@ public class Main {
                 return false;
             }
             if (checking[i][1] == boardSize) {
-                System.out.println(WINNER_O + ROW + (i + 1));
+                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, ROW, i + 1);
                 return false;
             }
         }
