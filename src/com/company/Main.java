@@ -3,6 +3,7 @@ package com.company;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static com.company.PlayerSignType.EMPTY;
 import static java.lang.Math.abs;
 
 import static com.company.PlayerSignType.X;
@@ -44,11 +45,11 @@ public class Main {
         System.out.println(SELECTED + boardSize);
 
         final PlayerSignType[][] board = new PlayerSignType[boardSize][boardSize];
-//        for (PlayerSignType[] signRow : board) {
-//            for (PlayerSignType sign : signRow) {
-//                sign = PlayerSignType.EMPTY;
-//            }
-//        }
+        for (PlayerSignType[] signRow : board) {
+            for (PlayerSignType sign : signRow) {
+                sign = PlayerSignType.EMPTY;
+            }
+        }
 
 
         drawField(boardSize, board);
@@ -252,20 +253,19 @@ public class Main {
         for (int i = 0; i < boardSize; i++) {
             System.out.println(horizontalFullLine);
             // linia z danymi z tabeli
-            StringBuilder lineWithData = new StringBuilder(" ");
-            lineWithData.append(i + 1);
-            lineWithData.append(" |");
+            String s = " ";
+            StringBuilder lineWithData = new StringBuilder(s);
+            lineWithData.append((i + 1) + " |");
             for (int j = 0; j < boardSize; j++) {
-                switch (board[i][j]) {
-                    case EMPTY:
-                        lineWithData.append("   |");
-                        break;
-                    default:
-                        lineWithData.append(" ").append(board[i][j]).append(" |");
+                if (board[i][j] == PlayerSignType.EMPTY) {
+                    lineWithData.append("   |");
+                } else {
+                    lineWithData.append(" " + board[i][j] + " |");
                 }
             }
+            s = lineWithData.toString();
+            System.out.println(s);
 
-            System.out.println(lineWithData);
         }
         //linia pozioma
         System.out.println(horizontalFullLine);
