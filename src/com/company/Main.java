@@ -45,13 +45,17 @@ public class Main {
         System.out.println(SELECTED + boardSize);
 
         final PlayerSignType[][] board = new PlayerSignType[boardSize][boardSize];
-        for (PlayerSignType[] signRow : board) {
-            for (PlayerSignType sign : signRow) {
-                sign = PlayerSignType.EMPTY;
+//        for (PlayerSignType[] signRow : board) {
+//            for (PlayerSignType sign : signRow) {
+//                sign = PlayerSignType.EMPTY;
+//            }
+//        }
+
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize ; j++) {
+                board[i][j] = PlayerSignType.EMPTY;
             }
         }
-
-
         drawField(boardSize, board);
         do {
             rowNumber = getRowNumber(boardSize);
@@ -59,7 +63,7 @@ public class Main {
             //przenieść do funkcji załaduj do tablicy
             System.out.println(SELECTED + rowNumber + "/" + columnNumber);
             if (board[rowNumber - 1][columnNumber - 1] == PlayerSignType.EMPTY) {
-                board[rowNumber - 1][columnNumber - 1] = X;
+                board[rowNumber - 1][columnNumber - 1] = PlayerSignType.X;
             } else {
                 System.out.println(NOT_EMPTY_PLACE);
                 continue;
