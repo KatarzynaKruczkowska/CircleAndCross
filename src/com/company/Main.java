@@ -52,10 +52,11 @@ public class Main {
 //        }
 
         for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize ; j++) {
+            for (int j = 0; j < boardSize; j++) {
                 board[i][j] = PlayerSignType.EMPTY;
             }
         }
+
         drawField(boardSize, board);
         do {
             rowNumber = getRowNumber(boardSize);
@@ -242,36 +243,37 @@ public class Main {
     public static void drawField(int boardSize, final PlayerSignType[][] board) {
 
         System.out.println("");
-        StringBuilder firstLine = new StringBuilder("     ");     // 3 spacje na początku na kolumnę numerów wierszy
+        final StringBuilder firstLine = new StringBuilder("     ");     // 3 spacje na początku na kolumnę numerów wierszy
 
         for (int i = 0; i < boardSize; i++) {
             firstLine.append((char) ('a' + i)).append(" ! ");
         }
         System.out.println(firstLine.toString());
 
-        StringBuilder horizontalFullLine = new StringBuilder("   ");
-        for (int i = 0; i < boardSize * 4 + 1; i++) {
-            horizontalFullLine.append("-");
+        final StringBuilder horizontalFullLine = new StringBuilder("   ");
+        for (int i = 0; i < boardSize; i++) {
+            horizontalFullLine.append("----");
         }
+        horizontalFullLine.append("-");
 
         for (int i = 0; i < boardSize; i++) {
-            System.out.println(horizontalFullLine);
+            System.out.println(horizontalFullLine.toString());
             // linia z danymi z tabeli
-            String s = " ";
-            StringBuilder lineWithData = new StringBuilder(s);
+            //String s = " ";
+            final StringBuilder lineWithData = new StringBuilder(" ");
             lineWithData.append((i + 1) + " |");
             for (int j = 0; j < boardSize; j++) {
                 if (board[i][j] == PlayerSignType.EMPTY) {
                     lineWithData.append("   |");
                 } else {
-                    lineWithData.append(" " + board[i][j] + " |");
+                    lineWithData.append(" ").append(board[i][j]).append(" |");
                 }
             }
-            s = lineWithData.toString();
-            System.out.println(s);
+            //s = lineWithData.toString();
+            System.out.println(lineWithData.toString());
 
         }
         //linia pozioma
-        System.out.println(horizontalFullLine);
+        System.out.println(horizontalFullLine.toString());
     }
 }
