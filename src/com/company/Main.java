@@ -3,11 +3,11 @@ package com.company;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static com.company.PlayerSignType.EMPTY;
 import static java.lang.Math.abs;
 
 import static com.company.PlayerSignType.X;
 import static com.company.Texts.*;
+import static java.lang.Math.signum;
 
 public class Main {
 
@@ -63,12 +63,10 @@ public class Main {
             columnNumber = getColumnNumber(boardSize);
             //przenieść do funkcji załaduj do tablicy
             System.out.println(SELECTED + rowNumber + "/" + columnNumber);
-            if (board[rowNumber - 1][columnNumber - 1] == PlayerSignType.EMPTY) {
-                board[rowNumber - 1][columnNumber - 1] = PlayerSignType.X;
-            } else {
-                System.out.println(NOT_EMPTY_PLACE);
+            if (!putToTheBoard(rowNumber, columnNumber, X, board)) {
                 continue;
             }
+
             drawField(boardSize, board);
             //sprawdzenie
             shouldPlayAgain = verifyIfContinue(boardSize, board);
@@ -79,6 +77,16 @@ public class Main {
 
         } while (shouldPlayAgain);
         System.out.println(END_OF_THE_GAME);
+    }
+
+    private static boolean putToTheBoard(int rowNumber, int columnNumber, PlayerSignType oneSing, PlayerSignType[][] board) {
+        if (board[rowNumber - 1][columnNumber - 1] == PlayerSignType.EMPTY) {
+            board[rowNumber - 1][columnNumber - 1] = oneSing;
+        } else {
+            System.out.println(NOT_EMPTY_PLACE);
+            return false;
+        }
+        return true;
     }
 
     private static boolean verifyIfContinue(int boardSize, final PlayerSignType[][] board) {
