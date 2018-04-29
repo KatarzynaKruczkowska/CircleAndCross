@@ -18,7 +18,7 @@ public class Texts {
     public static final String WINNER_O = "Wyglało \"O\" ";
     public static final String ROW = "wiersz";
     public static final String COLUMN = "kolumna ";
-    public static final String DIAGONAL_II = "przekątna ii";
-    public static final String DIAGONAL_JJ = "przekątna jj";
+    public static final String DIAGONAL_II = "przekątna ii czyli";
+    public static final String DIAGONAL_JJ = "przekątna jj czyli";
     public static final String END_OF_THE_GAME = "Koniec rozgrywki";
 }
