@@ -3,6 +3,7 @@ package com.company;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static com.company.PlayerSignType.EMPTY;
 import static java.lang.Math.abs;
 
 import static com.company.PlayerSignType.X;
@@ -50,6 +51,11 @@ public class Main {
 //            }
 //        }
 
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                board[i][j] = PlayerSignType.EMPTY;
+            }
+        }
 
         drawField(boardSize, board);
         do {
@@ -58,7 +64,7 @@ public class Main {
             //przenieść do funkcji załaduj do tablicy
             System.out.println(SELECTED + rowNumber + "/" + columnNumber);
             if (board[rowNumber - 1][columnNumber - 1] == PlayerSignType.EMPTY) {
-                board[rowNumber - 1][columnNumber - 1] = X;
+                board[rowNumber - 1][columnNumber - 1] = PlayerSignType.X;
             } else {
                 System.out.println(NOT_EMPTY_PLACE);
                 continue;
@@ -237,37 +243,37 @@ public class Main {
     public static void drawField(int boardSize, final PlayerSignType[][] board) {
 
         System.out.println("");
-        StringBuilder firstLine = new StringBuilder("     ");     // 3 spacje na początku na kolumnę numerów wierszy
+        final StringBuilder firstLine = new StringBuilder("     ");     // 3 spacje na początku na kolumnę numerów wierszy
 
         for (int i = 0; i < boardSize; i++) {
             firstLine.append((char) ('a' + i)).append(" ! ");
         }
         System.out.println(firstLine.toString());
 
-        StringBuilder horizontalFullLine = new StringBuilder("   ");
-        for (int i = 0; i < boardSize * 4 + 1; i++) {
-            horizontalFullLine.append("-");
+        final StringBuilder horizontalFullLine = new StringBuilder("   ");
+        for (int i = 0; i < boardSize; i++) {
+            horizontalFullLine.append("----");
         }
+        horizontalFullLine.append("-");
 
         for (int i = 0; i < boardSize; i++) {
-            System.out.println(horizontalFullLine);
+            System.out.println(horizontalFullLine.toString());
             // linia z danymi z tabeli
-            StringBuilder lineWithData = new StringBuilder(" ");
-            lineWithData.append(i + 1);
-            lineWithData.append(" |");
+            //String s = " ";
+            final StringBuilder lineWithData = new StringBuilder(" ");
+            lineWithData.append((i + 1) + " |");
             for (int j = 0; j < boardSize; j++) {
-                switch (board[i][j]) {
-                    case EMPTY:
-                        lineWithData.append("   |");
-                        break;
-                    default:
-                        lineWithData.append(" ").append(board[i][j]).append(" |");
+                if (board[i][j] == PlayerSignType.EMPTY) {
+                    lineWithData.append("   |");
+                } else {
+                    lineWithData.append(" ").append(board[i][j]).append(" |");
                 }
             }
+            //s = lineWithData.toString();
+            System.out.println(lineWithData.toString());
 
-            System.out.println(lineWithData);
         }
         //linia pozioma
-        System.out.println(horizontalFullLine);
+        System.out.println(horizontalFullLine.toString());
     }
 }
