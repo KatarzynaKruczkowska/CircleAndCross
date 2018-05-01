@@ -61,8 +61,7 @@ public class Main {
         do {
             rowNumber = getRowNumber(boardSize);
             columnNumber = getColumnNumber(boardSize);
-            //przenieść do funkcji załaduj do tablicy
-            System.out.println(SELECTED + rowNumber + "/" + columnNumber);
+            System.out.println(SELECTED + rowNumber + "/" + columnNumber);  //czy to zmieniać - jest numer powinna być litera
             if (!putToTheBoard(rowNumber, columnNumber, X, board)) {
                 continue;
             }
@@ -100,8 +99,12 @@ public class Main {
         int intForCheck = 0;
 
         for (int i = 0; i < board.length; i++) {
-            if (board[i][boardSize - i - 1] == PlayerSignType.X) intForCheck += 1;   // X
-            if (board[i][boardSize - i - 1] == PlayerSignType.O) intForCheck -= 1;   // O
+            switch (board[i][boardSize - i - 1]) {
+                case X:
+                    intForCheck += 1;
+                case O:
+                    intForCheck -= 1;
+            }
         }
 
         if (abs(intForCheck) == boardSize) {
@@ -116,8 +119,12 @@ public class Main {
         int intForCheck = 0;
 
         for (int i = 0; i < board.length; i++) {
-            if (board[i][i] == PlayerSignType.X) intForCheck += 1;   // X
-            if (board[i][i] == PlayerSignType.O) intForCheck -= 1;   // O
+            switch (board[i][i]) {
+                case X:
+                    intForCheck += 1;
+                case O:
+                    intForCheck -= 1;
+            }
         }
 
         if (abs(intForCheck) == boardSize) {
@@ -136,8 +143,12 @@ public class Main {
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[j][i] == PlayerSignType.X) tabForCheck[i] += 1;   // X
-                if (board[j][i] == PlayerSignType.O) tabForCheck[i] -= 1;   // O
+                switch (board[j][i]) {
+                    case X:
+                        tabForCheck[i] += 1;
+                    case O:
+                        tabForCheck[i] -= 1;
+                }
             }
         }
 
@@ -158,8 +169,12 @@ public class Main {
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[i][j] == PlayerSignType.X) tabForCheck[i] += 1;   // X
-                if (board[i][j] == PlayerSignType.O) tabForCheck[i] -= 1;   // O
+                switch (board[j][i]) {
+                    case X:
+                        tabForCheck[i] += 1;
+                    case O:
+                        tabForCheck[i] -= 1;
+                }
             }
         }
 
@@ -173,7 +188,7 @@ public class Main {
     }
 
     public static void announcementOfTheWinner(int valueOfRow, String rowColDiagName, int rowColDiagNumber) {
-        if (abs(valueOfRow) == boardSize && valueOfRow > 0) {
+        if (valueOfRow > 0) {
             System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, rowColDiagName, rowColDiagNumber);
         } else {
             System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, rowColDiagName, rowColDiagNumber);
