@@ -17,7 +17,6 @@ public class Main {
     private static final String WIN_OUTPUT_FORMAT = "%s %s %d\n";
 
     private static final Scanner INPUT = new Scanner(System.in);
-    private static int boardSize = 0;
     private static boolean shouldPlayAgain;
 
 
@@ -37,10 +36,11 @@ public class Main {
 
         shouldPlayAgain = true;
 
-        boardSize = getPlayingFieldSize(MAX_BOARD_SIZE);
+        final int boardSize = getPlayingFieldSize(MAX_BOARD_SIZE);
         System.out.println(SELECTED + boardSize);
 
-        final PlayerSignType[][] board = new PlayerSignType[boardSize][boardSize];
+//        final PlayerSignType[][] board = new PlayerSignType[boardSize][boardSize];
+        final Board board = new Board(boardSize);
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
