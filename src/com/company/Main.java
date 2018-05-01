@@ -78,7 +78,7 @@ public class Main {
         System.out.println(END_OF_THE_GAME);
     }
 
-    private static boolean putToTheBoard(int rowNumber, int columnNumber, PlayerSignType oneSing, PlayerSignType[][] board) {
+    private static boolean putToTheBoard(final int rowNumber, final int columnNumber, PlayerSignType oneSing, PlayerSignType[][] board) {
         if (board[rowNumber - 1][columnNumber - 1] == PlayerSignType.EMPTY) {
             board[rowNumber - 1][columnNumber - 1] = oneSing;
         } else {
