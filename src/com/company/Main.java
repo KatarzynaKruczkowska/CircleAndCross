@@ -3,11 +3,11 @@ package com.company;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static com.company.PlayerSignType.EMPTY;
 import static java.lang.Math.abs;
 
 import static com.company.PlayerSignType.X;
 import static com.company.Texts.*;
+import static java.lang.Math.signum;
 
 public class Main {
 
@@ -61,14 +61,11 @@ public class Main {
         do {
             rowNumber = getRowNumber(boardSize);
             columnNumber = getColumnNumber(boardSize);
-            //przenieść do funkcji załaduj do tablicy
-            System.out.println(SELECTED + rowNumber + "/" + columnNumber);
-            if (board[rowNumber - 1][columnNumber - 1] == PlayerSignType.EMPTY) {
-                board[rowNumber - 1][columnNumber - 1] = PlayerSignType.X;
-            } else {
-                System.out.println(NOT_EMPTY_PLACE);
+            System.out.println(SELECTED + rowNumber + "/" + columnNumber);  //czy to zmieniać - jest numer powinna być litera
+            if (!putToTheBoard(rowNumber, columnNumber, X, board)) {
                 continue;
             }
+
             drawField(boardSize, board);
             //sprawdzenie
             shouldPlayAgain = verifyIfContinue(boardSize, board);
@@ -79,6 +76,16 @@ public class Main {
 
         } while (shouldPlayAgain);
         System.out.println(END_OF_THE_GAME);
+    }
+
+    private static boolean putToTheBoard(final int rowNumber, final int columnNumber, PlayerSignType oneSing, PlayerSignType[][] board) {
+        if (board[rowNumber - 1][columnNumber - 1] == PlayerSignType.EMPTY) {
+            board[rowNumber - 1][columnNumber - 1] = oneSing;
+        } else {
+            System.out.println(NOT_EMPTY_PLACE);
+            return false;
+        }
+        return true;
     }
 
     private static boolean verifyIfContinue(int boardSize, final PlayerSignType[][] board) {
@@ -92,16 +99,16 @@ public class Main {
         int intForCheck = 0;
 
         for (int i = 0; i < board.length; i++) {
-            if (board[i][boardSize - i - 1] == PlayerSignType.X) intForCheck += 1;   // X
-            if (board[i][boardSize - i - 1] == PlayerSignType.O) intForCheck -= 1;   // O
+            switch (board[i][boardSize - i - 1]) {
+                case X:
+                    intForCheck += 1;
+                case O:
+                    intForCheck -= 1;
+            }
         }
 
-        if (abs(intForCheck) == boardSize && intForCheck > 0) {
-            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, DIAGONAL_JJ);
-            return false;
-        }
-        if (abs(intForCheck) == boardSize && intForCheck < 0) {
-            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, DIAGONAL_JJ);
+        if (abs(intForCheck) == boardSize) {
+            announcementOfTheWinner(intForCheck, DIAGONAL_JJ, 2);  //jak numerować przekątne?
             return false;
         }
         return true;
@@ -112,16 +119,16 @@ public class Main {
         int intForCheck = 0;
 
         for (int i = 0; i < board.length; i++) {
-            if (board[i][i] == PlayerSignType.X) intForCheck += 1;   // X
-            if (board[i][i] == PlayerSignType.O) intForCheck -= 1;   // O
+            switch (board[i][i]) {
+                case X:
+                    intForCheck += 1;
+                case O:
+                    intForCheck -= 1;
+            }
         }
 
-        if (abs(intForCheck) == boardSize && intForCheck > 0) {
-            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, DIAGONAL_II);
-            return false;
-        }
-        if (abs(intForCheck) == boardSize && intForCheck < 0) {
-            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, DIAGONAL_II);
+        if (abs(intForCheck) == boardSize) {
+            announcementOfTheWinner(intForCheck, DIAGONAL_II, 1);  //jak numerować przekątne?
             return false;
         }
         return true;
@@ -129,27 +136,25 @@ public class Main {
     }
 
     public static boolean verifyIfColumnIsNotFull(int boardSize, final PlayerSignType[][] board) {
-        int[][] tabForCheck = new int[boardSize][2];
+        int[] tabForCheck = new int[boardSize];
         for (int i = 0; i < tabForCheck.length; i++) {
-            for (int j = 0; j < 2; j++) {
-                tabForCheck[i][j] = 0;
-            }
+            tabForCheck[i] = 0;
         }
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[j][i] == PlayerSignType.X) tabForCheck[i][0] += 1;   // X
-                if (board[j][i] == PlayerSignType.O) tabForCheck[i][1] -= 1;   // O
+                switch (board[j][i]) {
+                    case X:
+                        tabForCheck[i] += 1;
+                    case O:
+                        tabForCheck[i] -= 1;
+                }
             }
         }
 
         for (int i = 0; i < tabForCheck.length; i++) {
-            if (tabForCheck[i][0] == boardSize) {
-                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, COLUMN, i + 1);
-                return false;
-            }
-            if (abs(tabForCheck[i][1]) == boardSize) {
-                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, COLUMN, i + 1);
+            if (abs(tabForCheck[i]) == boardSize) {
+                announcementOfTheWinner(tabForCheck[i], COLUMN, (i + 1));
                 return false;
             }
         }
@@ -157,31 +162,37 @@ public class Main {
     }
 
     public static boolean verifyIfRowIsNotFull(int boardSize, final PlayerSignType[][] board) {
-        int[][] tabForCheck = new int[boardSize][2];
+        int[] tabForCheck = new int[boardSize];
         for (int i = 0; i < tabForCheck.length; i++) {
-            for (int j = 0; j < 2; j++) {
-                tabForCheck[i][j] = 0;
-            }
+            tabForCheck[i] = 0;
         }
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[i][j] == PlayerSignType.X) tabForCheck[i][0] += 1;   // X
-                if (board[i][j] == PlayerSignType.O) tabForCheck[i][1] -= 1;   // O
+                switch (board[j][i]) {
+                    case X:
+                        tabForCheck[i] += 1;
+                    case O:
+                        tabForCheck[i] -= 1;
+                }
             }
         }
 
         for (int i = 0; i < tabForCheck.length; i++) {
-            if (tabForCheck[i][0] == boardSize) {
-                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, ROW, i + 1);
-                return false;
-            }
-            if (abs(tabForCheck[i][1]) == boardSize) {
-                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, ROW, i + 1);
+            if (abs(tabForCheck[i]) == boardSize) {
+                announcementOfTheWinner(tabForCheck[i], ROW, (i + 1));
                 return false;
             }
         }
         return true;
+    }
+
+    public static void announcementOfTheWinner(int valueOfRow, String rowColDiagName, int rowColDiagNumber) {
+        if (valueOfRow > 0) {
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, rowColDiagName, rowColDiagNumber);
+        } else {
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, rowColDiagName, rowColDiagNumber);
+        }
     }
 
     public static int getPlayingFieldSize(int max) {
