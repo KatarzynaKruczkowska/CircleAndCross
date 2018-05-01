@@ -3,6 +3,9 @@ package com.company;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static java.lang.Math.abs;
+
+import static com.company.PlayerSignType.X;
 import static com.company.Texts.*;
 
 public class Main {
@@ -14,6 +17,8 @@ public class Main {
     private static final char YES = 'T';
     private static final int ItIsO = 2; //oznacza O w tabeli//
     private static final int ItIsX = 1; //oznacza X w tabeli//
+    private static final String WIN_OUTPUT_FORMAT = "%s %s %d\n";
+
     private static final Scanner INPUT = new Scanner(System.in);
     private static int boardSize = 0;
     private static boolean shouldPlayAgain;
@@ -36,145 +41,137 @@ public class Main {
         shouldPlayAgain = true;
 
         boardSize = getPlayingFieldSize(MAX_BOARD_SIZE);
-        System.out.println(CHOOSED + boardSize);
+        System.out.println(SELECTED + boardSize);
 
-        int[][] tab = new int[boardSize][boardSize];
-        for (int i = 0; i < tab.length; i++) {
-            for (int j = 0; j < tab.length; j++) tab[i][j] = 0;
-        }
-        drawField(boardSize, tab);
+        final PlayerSignType[][] board = new PlayerSignType[boardSize][boardSize];
+//        for (PlayerSignType[] signRow : board) {
+//            for (PlayerSignType sign : signRow) {
+//                sign = PlayerSignType.EMPTY;
+//            }
+//        }
+
+
+        drawField(boardSize, board);
         do {
-            // X=>1 O=>2 default=>0
-
             rowNumber = getRowNumber(boardSize);
             columnNumber = getColumnNumber(boardSize);
             //przenieść do funkcji załaduj do tablicy
-            System.out.println(CHOOSED + rowNumber + "/" + columnNumber);
-            if (tab[rowNumber - 1][columnNumber - 1] == 0) {
-                tab[rowNumber - 1][columnNumber - 1] = ItIsX;
+            System.out.println(SELECTED + rowNumber + "/" + columnNumber);
+            if (board[rowNumber - 1][columnNumber - 1] == PlayerSignType.EMPTY) {
+                board[rowNumber - 1][columnNumber - 1] = X;
             } else {
                 System.out.println(NOT_EMPTY_PLACE);
                 continue;
             }
-            drawField(boardSize, tab);
+            drawField(boardSize, board);
             //sprawdzenie
-            shouldPlayAgain = verifyIfContinue(boardSize, tab);
+            shouldPlayAgain = verifyIfContinue(boardSize, board);
 
             //ruch "O"
-            //drawField(boardSize,tab);
+            //drawField(boardSize,board);
 
 
         } while (shouldPlayAgain);
-    }
-
-    public static boolean verifyIfContinue(int boardSize, int[][] tab) {
-        if (verifyIfRowIsNotFull(boardSize, tab)) {
-            if (verifyIfColumnIsNotFull(boardSize, tab)) {
-                if (verifyIfDiagonalXxIsNotFull(boardSize, tab)) {
-                    if (verifyIfDiagonalYyIsNotFull(boardSize, tab)) {
-                        return true;
-                    }
-                }
-            }
-        }
         System.out.println(END_OF_THE_GAME);
-        return false;
     }
 
-    public static boolean verifyIfDiagonalYyIsNotFull(int boardSize, int[][] tab) {
-        int[][] checking = new int[1][2];
-        checking[0][0] = 0;
-        checking[0][1] = 0;
+    private static boolean verifyIfContinue(int boardSize, final PlayerSignType[][] board) {
+        return verifyIfRowIsNotFull(boardSize, board)
+                && verifyIfColumnIsNotFull(boardSize, board)
+                && verifyIfDiagonalXxIsNotFull(boardSize, board)
+                && verifyIfDiagonalYyIsNotFull(boardSize, board);
+    }
 
-        for (int i = 0; i < tab.length; i++) {
-            if (tab[i][boardSize - i - 1] == ItIsX) checking[0][0] += 1;   // X
-            if (tab[i][boardSize - i - 1] == ItIsO) checking[0][1] += 1;   // O
+    public static boolean verifyIfDiagonalYyIsNotFull(int boardSize, final PlayerSignType[][] board) {
+        int intForCheck = 0;
+
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][boardSize - i - 1] == PlayerSignType.X) intForCheck += 1;   // X
+            if (board[i][boardSize - i - 1] == PlayerSignType.O) intForCheck -= 1;   // O
         }
 
-        if (checking[0][0] == boardSize) {
-            System.out.println(WINNER_X + DIAGONAL_JJ);
+        if (abs(intForCheck) == boardSize && intForCheck > 0) {
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, DIAGONAL_JJ);
             return false;
         }
-        if (checking[0][1] == boardSize) {
-            System.out.println(WINNER_O + DIAGONAL_JJ);
+        if (abs(intForCheck) == boardSize && intForCheck < 0) {
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, DIAGONAL_JJ);
             return false;
         }
         return true;
 
     }
 
-    public static boolean verifyIfDiagonalXxIsNotFull(int boardSize, int[][] tab) {
-        int[][] checking = new int[1][2];
-        checking[0][0] = 0;
-        checking[0][1] = 0;
+    public static boolean verifyIfDiagonalXxIsNotFull(int boardSize, final PlayerSignType[][] board) {
+        int intForCheck = 0;
 
-        for (int i = 0; i < tab.length; i++) {
-            if (tab[i][i] == ItIsX) checking[0][0] += 1;   // X
-            if (tab[i][i] == ItIsO) checking[0][1] += 1;   // O
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][i] == PlayerSignType.X) intForCheck += 1;   // X
+            if (board[i][i] == PlayerSignType.O) intForCheck -= 1;   // O
         }
 
-        if (checking[0][0] == boardSize) {
-            System.out.println(WINNER_X + DIAGONAL_II);
+        if (abs(intForCheck) == boardSize && intForCheck > 0) {
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, DIAGONAL_II);
             return false;
         }
-        if (checking[0][1] == boardSize) {
-            System.out.println(WINNER_O + DIAGONAL_II);
+        if (abs(intForCheck) == boardSize && intForCheck < 0) {
+            System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, DIAGONAL_II);
             return false;
         }
         return true;
 
     }
 
-    public static boolean verifyIfColumnIsNotFull(int boardSize, int[][] tab) {
-        int[][] checking = new int[boardSize][2];
-        for (int i = 0; i < checking.length; i++) {
+    public static boolean verifyIfColumnIsNotFull(int boardSize, final PlayerSignType[][] board) {
+        int[][] tabForCheck = new int[boardSize][2];
+        for (int i = 0; i < tabForCheck.length; i++) {
             for (int j = 0; j < 2; j++) {
-                checking[i][j] = 0;
+                tabForCheck[i][j] = 0;
             }
         }
 
-        for (int i = 0; i < tab.length; i++) {
-            for (int j = 0; j < tab.length; j++) {
-                if (tab[j][i] == ItIsX) checking[i][0] += 1;   // X
-                if (tab[j][i] == ItIsO) checking[i][1] += 1;   // O
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[j][i] == PlayerSignType.X) tabForCheck[i][0] += 1;   // X
+                if (board[j][i] == PlayerSignType.O) tabForCheck[i][1] -= 1;   // O
             }
         }
 
-        for (int i = 0; i < checking.length; i++) {
-            if (checking[i][0] == boardSize) {
-                System.out.println(WINNER_X + COLUMN + (i + 1));
+        for (int i = 0; i < tabForCheck.length; i++) {
+            if (tabForCheck[i][0] == boardSize) {
+                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, COLUMN, i + 1);
                 return false;
             }
-            if (checking[i][1] == boardSize) {
-                System.out.println(WINNER_O + COLUMN + (i + 1));
+            if (abs(tabForCheck[i][1]) == boardSize) {
+                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, COLUMN, i + 1);
                 return false;
             }
         }
         return true;
     }
 
-    public static boolean verifyIfRowIsNotFull(int boardSize, int[][] tab) {
-        int[][] checking = new int[boardSize][2];
-        for (int i = 0; i < checking.length; i++) {
+    public static boolean verifyIfRowIsNotFull(int boardSize, final PlayerSignType[][] board) {
+        int[][] tabForCheck = new int[boardSize][2];
+        for (int i = 0; i < tabForCheck.length; i++) {
             for (int j = 0; j < 2; j++) {
-                checking[i][j] = 0;
+                tabForCheck[i][j] = 0;
             }
         }
 
-        for (int i = 0; i < tab.length; i++) {
-            for (int j = 0; j < tab.length; j++) {
-                if (tab[i][j] == ItIsX) checking[i][0] += 1;   // X
-                if (tab[i][j] == ItIsO) checking[i][1] += 1;   // O
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] == PlayerSignType.X) tabForCheck[i][0] += 1;   // X
+                if (board[i][j] == PlayerSignType.O) tabForCheck[i][1] -= 1;   // O
             }
         }
 
-        for (int i = 0; i < checking.length; i++) {
-            if (checking[i][0] == boardSize) {
-                System.out.println(WINNER_X + ROW + (i + 1));
+        for (int i = 0; i < tabForCheck.length; i++) {
+            if (tabForCheck[i][0] == boardSize) {
+                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_X, ROW, i + 1);
                 return false;
             }
-            if (checking[i][1] == boardSize) {
-                System.out.println(WINNER_O + ROW + (i + 1));
+            if (abs(tabForCheck[i][1]) == boardSize) {
+                System.out.printf(WIN_OUTPUT_FORMAT, WINNER_O, ROW, i + 1);
                 return false;
             }
         }
@@ -237,31 +234,34 @@ public class Main {
         return inputText.toUpperCase().charAt(0);
     }
 
-    public static void drawField(int rowCount, int[][] tab2) {
+    public static void drawField(int boardSize, final PlayerSignType[][] board) {
 
         System.out.println("");
-        String firstLine = "     ";     // 3 spacje na początku na kolumnę numerów wierszy
+        StringBuilder firstLine = new StringBuilder("     ");     // 3 spacje na początku na kolumnę numerów wierszy
 
-        for (int i = 0; i < rowCount; i++) firstLine += (char) ('a' + i) + " ! ";
-        System.out.println(firstLine);
+        for (int i = 0; i < boardSize; i++) {
+            firstLine.append((char) ('a' + i)).append(" ! ");
+        }
+        System.out.println(firstLine.toString());
 
-        String horizontalFullLine = "   ";
-        for (int i = 0; i < rowCount * 4 + 1; i++) horizontalFullLine += "-";
+        StringBuilder horizontalFullLine = new StringBuilder("   ");
+        for (int i = 0; i < boardSize * 4 + 1; i++) {
+            horizontalFullLine.append("-");
+        }
 
-        for (int i = 0; i < rowCount; i++) {
+        for (int i = 0; i < boardSize; i++) {
             System.out.println(horizontalFullLine);
             // linia z danymi z tabeli
-            String lineWithData = " " + (i + 1) + " |";
-            for (int j = 0; j < rowCount; j++) {
-                switch (tab2[i][j]) {
-                    case ItIsX:
-                        lineWithData += " X |";
-                        break;
-                    case ItIsO:
-                        lineWithData += " O |";
+            StringBuilder lineWithData = new StringBuilder(" ");
+            lineWithData.append(i + 1);
+            lineWithData.append(" |");
+            for (int j = 0; j < boardSize; j++) {
+                switch (board[i][j]) {
+                    case EMPTY:
+                        lineWithData.append("   |");
                         break;
                     default:
-                        lineWithData += "   |";
+                        lineWithData.append(" ").append(board[i][j]).append(" |");
                 }
             }
 
