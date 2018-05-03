@@ -27,4 +27,19 @@ public class Board {
         }
         return false;
     }
+
+    public String getSignAndChangeToString(final int row, final int column) {
+        if (data[row][column] == PlayerSignType.EMPTY) {
+            return (" ");
+        } else {
+            return data[row][column].toString();
+        }
+    }
+
+    public boolean isSignEqual(final PlayerSignType sign, final int row, final int column) {
+        if (data[row][column].equals(sign)) {
+            return true;
+        }
+        return false;
+    }
 }
