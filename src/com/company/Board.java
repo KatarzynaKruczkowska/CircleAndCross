@@ -29,19 +29,15 @@ public class Board {
     }
 
     public String getSignText(final int row, final int column) {
-        return data[row][column].toString();
-//        if (data[row][column] == PlayerSignType.EMPTY) {
-//            return (" ");
-//        } else {
-//            return data[row][column].toString();
-//        }
+        if (data[row][column] == PlayerSignType.EMPTY) {
+            return (" ");
+        } else {
+            return data[row][column].toString();
+        }
     }
 
     public boolean isSignEqual(final PlayerSignType sign, final int row, final int column) {
-        if (data[row][column] == sign) {
-            return true;
-        }
-        return false;
+        return data[row][column] == sign;
     }
 
     public int countDiagonalXxValue() {

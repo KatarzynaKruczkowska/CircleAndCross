@@ -241,7 +241,7 @@ public class Main {
             lineWithData.setLength(0);
             lineWithData.append(" ").append(i + 1).append(" |");
             for (int j = 0; j < boardSize; j++) {
-                lineWithData.append(" ").append(getOneSign(i, j, board)).append(" |");
+                lineWithData.append(" ").append(board.getSignText(i, j)).append(" |");
             }
             System.out.println(lineWithData);
 
@@ -250,11 +250,4 @@ public class Main {
         System.out.println(horizontalFullLine);
     }
 
-    public static String getOneSign(int row, int column, final Board board) {
-        String sign = board.getSignText(row, column);
-        if (sign == ("EMPTY")) {
-            sign = " ";
-        }
-        return sign;
-    }
 }
