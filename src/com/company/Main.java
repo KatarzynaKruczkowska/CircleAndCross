@@ -17,7 +17,7 @@ public class Main {
     private static final String WIN_OUTPUT_FORMAT = "%s %s %d\n";
 
     private static final Scanner INPUT = new Scanner(System.in);
-    private static boolean PlayAgain;
+    private static boolean shouldPlayAgain;
 
 
     public static void main(String[] args) throws IOException {
@@ -34,12 +34,11 @@ public class Main {
         int rowNumber = 0;
         int columnNumber = 0;
 
-        PlayAgain = true;
+        shouldPlayAgain = true;
 
         final int boardSize = getPlayingFieldSize(MAX_BOARD_SIZE);
         System.out.println(SELECTED + boardSize);
 
-//        final PlayerSignType[][] board = new PlayerSignType[boardSize][boardSize];
         final Board board = new Board(boardSize);
 
         drawField(boardSize, board);
@@ -53,45 +52,33 @@ public class Main {
 
             drawField(boardSize, board);
             //sprawdzenie
-            PlayAgain = verifyIfContinue(boardSize, board);
+            shouldPlayAgain = verifyIfContinue(boardSize, board);
 
             //ruch "O"
             //drawField(boardSize,board);
 
 
-        } while (PlayAgain);
+        } while (shouldPlayAgain);
         System.out.println(END_OF_THE_GAME);
     }
 
-    private static boolean putToBoard(final int row, final int column, final PlayerSignType Sing, Board board) {
-        if (!board.insertSign(Sing, row - 1, column - 1)) {
+    private static boolean putToBoard(final int row, final int column, final PlayerSignType sign, final Board board) {
+        if (!board.insertSign(sign, row - 1, column - 1)) {
             System.out.println(NOT_EMPTY_PLACE);
             return false;
         }
         return true;
     }
 
-    private static boolean verifyIfContinue(final int boardSize, Board board) {
+    private static boolean verifyIfContinue(final int boardSize, final Board board) {
         return verifyIfRowIsNotFull(boardSize, board)
                 && verifyIfColumnIsNotFull(boardSize, board)
                 && verifyIfDiagonalXxIsNotFull(boardSize, board)
                 && verifyIfDiagonalYyIsNotFull(boardSize, board);
     }
 
-    public static boolean verifyIfDiagonalYyIsNotFull(final int boardSize, Board board) {
-        int intForCheck = 0;
-        int column = 0;
-
-        for (int i = 0; i < boardSize; i++) {
-            column = boardSize - i - 1;
-            if (board.isSignEqual(PlayerSignType.X, i, column)) {
-                intForCheck += 1;
-            } else {
-                if (board.isSignEqual(PlayerSignType.O, i, column)) {
-                    intForCheck -= 1;
-                }
-            }
-        }
+    public static boolean verifyIfDiagonalYyIsNotFull(final int boardSize, final Board board) {
+        int intForCheck = board.countDiagonalYyValue();
 
         if (abs(intForCheck) == boardSize) {
             announceTheWinner(intForCheck, DIAGONAL_JJ, 2);  //jak numerować przekątne?
@@ -101,18 +88,8 @@ public class Main {
 
     }
 
-    public static boolean verifyIfDiagonalXxIsNotFull(final int boardSize, Board board) {
-        int intForCheck = 0;
-
-        for (int i = 0; i < boardSize; i++) {
-            if (board.isSignEqual(PlayerSignType.X, i, i)) {
-                intForCheck += 1;
-            } else {
-                if (board.isSignEqual(PlayerSignType.O, i, i)) {
-                    intForCheck -= 1;
-                }
-            }
-        }
+    public static boolean verifyIfDiagonalXxIsNotFull(final int boardSize, final Board board) {
+        int intForCheck = board.countDiagonalXxValue();
 
         if (abs(intForCheck) == boardSize) {
             announceTheWinner(intForCheck, DIAGONAL_II, 1);  //jak numerować przekątne?
@@ -122,7 +99,7 @@ public class Main {
 
     }
 
-    public static boolean verifyIfColumnIsNotFull(final int boardSize, Board board) {
+    public static boolean verifyIfColumnIsNotFull(final int boardSize, final Board board) {
         final int[] tabForCheck = new int[boardSize];
         for (int i = 0; i < tabForCheck.length; i++) {
             tabForCheck[i] = 0;
@@ -242,7 +219,7 @@ public class Main {
         return inputText.toUpperCase().charAt(0);
     }
 
-    public static void drawField(int boardSize, Board board) {
+    public static void drawField(int boardSize, final Board board) {
 
         System.out.println("");
         final StringBuilder firstLine = new StringBuilder("     ");     // 3 spacje na początku na kolumnę numerów wierszy
@@ -264,12 +241,20 @@ public class Main {
             lineWithData.setLength(0);
             lineWithData.append(" ").append(i + 1).append(" |");
             for (int j = 0; j < boardSize; j++) {
-                lineWithData.append(" ").append(board.getSignAndChangeToString(i, j)).append(" |");
+                lineWithData.append(" ").append(getOneSign(i, j, board)).append(" |");
             }
             System.out.println(lineWithData);
 
         }
         //linia pozioma
         System.out.println(horizontalFullLine);
+    }
+
+    public static String getOneSign(int row, int column, final Board board) {
+        String sign = board.getSignText(row, column);
+        if (sign == ("EMPTY")) {
+            sign = " ";
+        }
+        return sign;
     }
 }
