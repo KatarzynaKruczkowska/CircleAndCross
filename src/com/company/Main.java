@@ -17,7 +17,6 @@ public class Main {
     private static final String WIN_OUTPUT_FORMAT = "%s %s %d\n";
 
     private static final Scanner INPUT = new Scanner(System.in);
-    private static int boardSize = 0;
     private static boolean shouldPlayAgain;
 
 
@@ -37,23 +36,17 @@ public class Main {
 
         shouldPlayAgain = true;
 
-        boardSize = getPlayingFieldSize(MAX_BOARD_SIZE);
+        final int boardSize = getPlayingFieldSize(MAX_BOARD_SIZE);
         System.out.println(SELECTED + boardSize);
 
-        final PlayerSignType[][] board = new PlayerSignType[boardSize][boardSize];
-
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                board[i][j] = PlayerSignType.EMPTY;
-            }
-        }
+        final Board board = new Board(boardSize);
 
         drawField(boardSize, board);
         do {
             rowNumber = getRowNumber(boardSize);
             columnNumber = getColumnNumber(boardSize);
             System.out.println(SELECTED + rowNumber + "/" + columnNumber);  //czy to zmieniać - jest numer powinna być litera
-            if (!putToTheBoard(rowNumber, columnNumber, X, board)) {
+            if (!putToBoard(rowNumber, columnNumber, X, board)) {
                 continue;
             }
 
@@ -69,34 +62,23 @@ public class Main {
         System.out.println(END_OF_THE_GAME);
     }
 
-    private static boolean putToTheBoard(final int rowNumber, final int columnNumber, final PlayerSignType oneSing, final PlayerSignType[][] board) {
-        if (board[rowNumber - 1][columnNumber - 1] == PlayerSignType.EMPTY) {
-            board[rowNumber - 1][columnNumber - 1] = oneSing;
-        } else {
+    private static boolean putToBoard(final int row, final int column, final PlayerSignType sign, final Board board) {
+        if (!board.insertSign(sign, row - 1, column - 1)) {
             System.out.println(NOT_EMPTY_PLACE);
             return false;
         }
         return true;
     }
 
-    private static boolean verifyIfContinue(final int boardSize, final PlayerSignType[][] board) {
+    private static boolean verifyIfContinue(final int boardSize, final Board board) {
         return verifyIfRowIsNotFull(boardSize, board)
                 && verifyIfColumnIsNotFull(boardSize, board)
                 && verifyIfDiagonalXxIsNotFull(boardSize, board)
                 && verifyIfDiagonalYyIsNotFull(boardSize, board);
     }
 
-    public static boolean verifyIfDiagonalYyIsNotFull(final int boardSize, final PlayerSignType[][] board) {
-        int intForCheck = 0;
-
-        for (int i = 0; i < board.length; i++) {
-            switch (board[i][boardSize - i - 1]) {
-                case X:
-                    intForCheck += 1;
-                case O:
-                    intForCheck -= 1;
-            }
-        }
+    public static boolean verifyIfDiagonalYyIsNotFull(final int boardSize, final Board board) {
+        int intForCheck = board.countDiagonalYyValue();
 
         if (abs(intForCheck) == boardSize) {
             announceTheWinner(intForCheck, DIAGONAL_JJ, 2);  //jak numerować przekątne?
@@ -106,17 +88,8 @@ public class Main {
 
     }
 
-    public static boolean verifyIfDiagonalXxIsNotFull(final int boardSize, final PlayerSignType[][] board) {
-        int intForCheck = 0;
-
-        for (int i = 0; i < board.length; i++) {
-            switch (board[i][i]) {
-                case X:
-                    intForCheck += 1;
-                case O:
-                    intForCheck -= 1;
-            }
-        }
+    public static boolean verifyIfDiagonalXxIsNotFull(final int boardSize, final Board board) {
+        int intForCheck = board.countDiagonalXxValue();
 
         if (abs(intForCheck) == boardSize) {
             announceTheWinner(intForCheck, DIAGONAL_II, 1);  //jak numerować przekątne?
@@ -126,19 +99,20 @@ public class Main {
 
     }
 
-    public static boolean verifyIfColumnIsNotFull(final int boardSize, final PlayerSignType[][] board) {
+    public static boolean verifyIfColumnIsNotFull(final int boardSize, final Board board) {
         final int[] tabForCheck = new int[boardSize];
         for (int i = 0; i < tabForCheck.length; i++) {
             tabForCheck[i] = 0;
         }
 
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                switch (board[j][i]) {
-                    case X:
-                        tabForCheck[i] += 1;
-                    case O:
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (board.isSignEqual(PlayerSignType.X, j, i)) {
+                    tabForCheck[i] += 1;
+                } else {
+                    if (board.isSignEqual(PlayerSignType.O, j, i)) {
                         tabForCheck[i] -= 1;
+                    }
                 }
             }
         }
@@ -152,19 +126,20 @@ public class Main {
         return true;
     }
 
-    public static boolean verifyIfRowIsNotFull(final int boardSize, final PlayerSignType[][] board) {
+    public static boolean verifyIfRowIsNotFull(final int boardSize, final Board board) {
         final int[] tabForCheck = new int[boardSize];
         for (int i = 0; i < tabForCheck.length; i++) {
             tabForCheck[i] = 0;
         }
 
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                switch (board[j][i]) {
-                    case X:
-                        tabForCheck[i] += 1;
-                    case O:
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (board.isSignEqual(PlayerSignType.X, i, j)) {
+                    tabForCheck[i] += 1;
+                } else {
+                    if (board.isSignEqual(PlayerSignType.O, i, j)) {
                         tabForCheck[i] -= 1;
+                    }
                 }
             }
         }
@@ -244,7 +219,7 @@ public class Main {
         return inputText.toUpperCase().charAt(0);
     }
 
-    public static void drawField(int boardSize, final PlayerSignType[][] board) {
+    public static void drawField(int boardSize, final Board board) {
 
         System.out.println("");
         final StringBuilder firstLine = new StringBuilder("     ");     // 3 spacje na początku na kolumnę numerów wierszy
@@ -266,11 +241,7 @@ public class Main {
             lineWithData.setLength(0);
             lineWithData.append(" ").append(i + 1).append(" |");
             for (int j = 0; j < boardSize; j++) {
-                if (board[i][j] == PlayerSignType.EMPTY) {
-                    lineWithData.append("   |");
-                } else {
-                    lineWithData.append(" ").append(board[i][j]).append(" |");
-                }
+                lineWithData.append(" ").append(board.getSignText(i, j)).append(" |");
             }
             System.out.println(lineWithData);
 
@@ -278,4 +249,5 @@ public class Main {
         //linia pozioma
         System.out.println(horizontalFullLine);
     }
+
 }
