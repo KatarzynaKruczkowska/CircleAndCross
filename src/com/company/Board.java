@@ -23,17 +23,14 @@ public class Board {
                 && column >= 0 && column < size
                 && data[row][column] == PlayerSignType.EMPTY) {
             data[row][column] = sign;
+
             return true;
         }
         return false;
     }
 
     public String getSignText(final int row, final int column) {
-        if (data[row][column] == PlayerSignType.EMPTY) {
-            return (" ");
-        } else {
-            return data[row][column].toString();
-        }
+        return data[row][column].printableSign;
     }
 
     public boolean isSignEqual(final PlayerSignType sign, final int row, final int column) {
@@ -52,17 +49,12 @@ public class Board {
         }
         return intForCheck;
     }
-    public int countDiagonalYyValue(){
+
+    public int countDiagonalYyValue() {
         int intForCheck = 0;
-        int column = 0;
 
         for (int i = 0; i < data.length; i++) {
-            column = data.length - i - 1;
-            if (data [i][column] == PlayerSignType.X) {
-                intForCheck += 1;
-            } else if (data [i][column] == PlayerSignType.O) {
-                    intForCheck -= 1;
-            }
+            intForCheck += data[i][data.length - i - 1].intValue;
         }
         return intForCheck;
     }
