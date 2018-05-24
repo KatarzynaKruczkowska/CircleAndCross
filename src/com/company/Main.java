@@ -12,6 +12,8 @@ public class Main {
     private static final int MIN_BOARD_ID = 1;
     private static final char BAD_SIGN = '@';
     private static final char YES = 'T';
+    private static final String FORMATED_SELECT = "%s %d";
+    private static final String FORMATED_PLAYER_AND_CHOICE = "%s %s %n %s %s %d %s %s";
 
     private static final Scanner INPUT = new Scanner(System.in);
     private static boolean shouldPlayAgain;
@@ -36,7 +38,7 @@ public class Main {
         player = PlayerSignType.O;
 
         final int boardSize = getPlayingFieldSize(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
-        System.out.println(SELECTED + boardSize);
+        System.out.printf(FORMATED_SELECT, SELECTED, boardSize);
 
         final Board board = new Board(boardSize);
 
@@ -46,8 +48,7 @@ public class Main {
             System.out.println(PLAYER + player);
             rowNumber = getRowNumber(MIN_BOARD_ID, boardSize);
             columnNumber = getColumnNumber(boardSize);
-            System.out.println(PLAYER + player);
-            System.out.println(SELECTED + rowNumber + "/" + columnNumber);
+            System.out.printf(FORMATED_PLAYER_AND_CHOICE, PLAYER, player, SELECTED, ROW, rowNumber+1, COLUMN, columnNumber+1);
 
             if (board.insertSign(player, rowNumber, columnNumber)) {
                 board.addSignValue(rowNumber, columnNumber);
@@ -64,7 +65,7 @@ public class Main {
     public static PlayerSignType changePlayer(PlayerSignType player) {
         if (player == PlayerSignType.O) {
             player = PlayerSignType.X;
-        } else if (player == PlayerSignType.X) {
+        } else {
             player = PlayerSignType.O;
         }
         return player;
