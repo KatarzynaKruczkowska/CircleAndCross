@@ -1,12 +1,22 @@
 package com.company;
 
+import static java.lang.Math.abs;
+
 public class Board {
     private final int size;
     private final PlayerSignType[][] data;
+    private int rowValue[];
+    private int columnValue[];
+    private int diagXxValue;
+    private int diagYyValue;
 
     public Board(final int size) {
         this.size = size;
         data = new PlayerSignType[size][size];
+        this.rowValue = new int[size];
+        this.columnValue = new int[size];
+        this.diagXxValue = 0;
+        this.diagYyValue = 0;
         clear();
     }
 
@@ -15,7 +25,11 @@ public class Board {
             for (int j = 0; j < data[i].length; j++) {
                 data[i][j] = PlayerSignType.EMPTY;
             }
+            rowValue[i] = 0;
+            columnValue[i] = 0;
         }
+        diagXxValue = 0;
+        diagYyValue = 0;
     }
 
     public boolean insertSign(final PlayerSignType sign, final int row, final int column) {
@@ -28,42 +42,26 @@ public class Board {
         return false;
     }
 
+    public void addSignValue(final int row, final int column) {
+        rowValue[row] += data[row][column].intValue;
+        columnValue[column] += data[row][column].intValue;
+        if (row == column) {
+            diagXxValue += data[row][column].intValue;
+        }
+        if (column == data.length - row - 1) {
+            diagYyValue += data[row][column].intValue;
+        }
+    }
+
+    public boolean checkWinner(final int row, final int column) {
+        return (abs(rowValue[row]) == size
+                || abs(columnValue[column]) == size
+                || abs(diagXxValue) == size
+                || abs(diagYyValue) == size);
+    }
+
     public String getSignText(final int row, final int column) {
-        if (data[row][column] == PlayerSignType.EMPTY) {
-            return (" ");
-        } else {
-            return data[row][column].toString();
-        }
+        return data[row][column].printableSign;
     }
 
-    public boolean isSignEqual(final PlayerSignType sign, final int row, final int column) {
-        return data[row][column] == sign;
-    }
-
-    public int countDiagonalXxValue() {
-        int intForCheck = 0;
-
-        for (int i = 0; i < data.length; i++) {
-            if (data[i][i] == PlayerSignType.X) {
-                intForCheck += 1;
-            } else if (data[i][i] == PlayerSignType.O) {
-                intForCheck -= 1;
-            }
-        }
-        return intForCheck;
-    }
-    public int countDiagonalYyValue(){
-        int intForCheck = 0;
-        int column = 0;
-
-        for (int i = 0; i < data.length; i++) {
-            column = data.length - i - 1;
-            if (data [i][column] == PlayerSignType.X) {
-                intForCheck += 1;
-            } else if (data [i][column] == PlayerSignType.O) {
-                    intForCheck -= 1;
-            }
-        }
-        return intForCheck;
-    }
 }
