@@ -20,6 +20,10 @@ public class Board {
         clear();
     }
 
+    public int getSize() {
+        return size;
+    }
+
     private void clear() {
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[i].length; j++) {
@@ -54,10 +58,10 @@ public class Board {
     }
 
     public boolean checkWinner(final int row, final int column) {
-        return (abs(rowValue[row]) == size
+        return abs(rowValue[row]) == size
                 || abs(columnValue[column]) == size
                 || abs(diagXxValue) == size
-                || abs(diagYyValue) == size);
+                || abs(diagYyValue) == size;
     }
 
     public String getSignText(final int row, final int column) {

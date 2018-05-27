@@ -1,6 +1,5 @@
 package com.company;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import static com.company.Texts.*;
@@ -19,9 +18,10 @@ public class Main {
     private static boolean shouldPlayAgain;
     private static PlayerSignType player;
 
+    private static final IOManager ioManager = new IOManagerConsole();
 
-    public static void main(String[] args) throws IOException {
-        System.out.println(WELCOME);
+    public static void main(String[] args) {
+        ioManager.showMessage(WELCOME);
         char notEnd = YES;
         do {
             play();
@@ -43,17 +43,17 @@ public class Main {
         final Board board = new Board(boardSize);
 
         do {
-            drawField(boardSize, board);
+            drawField(board);
             player = changePlayer(player);
             System.out.println(PLAYER + player);
             rowNumber = getRowNumber(MIN_BOARD_ID, boardSize);
             columnNumber = getColumnNumber(boardSize);
-            System.out.printf(FORMATED_PLAYER_AND_CHOICE, PLAYER, player, SELECTED, ROW, rowNumber+1, COLUMN, columnNumber+1);
+            System.out.printf(FORMATED_PLAYER_AND_CHOICE, PLAYER, player, SELECTED, ROW, rowNumber + 1, COLUMN, columnNumber + 1);
 
             if (board.insertSign(player, rowNumber, columnNumber)) {
                 board.addSignValue(rowNumber, columnNumber);
                 if (board.checkWinner(rowNumber, columnNumber)) {
-                    drawField(boardSize, board);
+                    drawField(board);
                     System.out.println(WINNER + player.printableSign);
                     shouldPlayAgain = false;
                 }
@@ -126,28 +126,28 @@ public class Main {
         return inputText.toUpperCase().charAt(0);
     }
 
-    public static void drawField(int boardSize, final Board board) {
+    public static void drawField(final Board board) {
 
-        System.out.println("");
+        System.out.println();
         final StringBuilder firstLine = new StringBuilder("     ");     // 3 spacje na początku na kolumnę numerów wierszy
 
-        for (int i = 0; i < boardSize; i++) {
+        for (int i = 0; i < board.getSize(); i++) {
             firstLine.append((char) ('a' + i)).append(" ! ");
         }
         System.out.println(firstLine);
 
         final StringBuilder horizontalFullLine = new StringBuilder("   ");
-        for (int i = 0; i < boardSize; i++) {
+        for (int i = 0; i < board.getSize(); i++) {
             horizontalFullLine.append("----");
         }
         horizontalFullLine.append("-");
 
         final StringBuilder lineWithData = new StringBuilder();
-        for (int i = 0; i < boardSize; i++) {
+        for (int i = 0; i < board.getSize(); i++) {
             System.out.println(horizontalFullLine);
             lineWithData.setLength(0);
             lineWithData.append(" ").append(i + 1).append(" |");
-            for (int j = 0; j < boardSize; j++) {
+            for (int j = 0; j < board.getSize(); j++) {
                 lineWithData.append(" ").append(board.getSignText(i, j)).append(" |");
             }
             System.out.println(lineWithData);
