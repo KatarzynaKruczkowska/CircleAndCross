@@ -9,6 +9,7 @@ public class Board {
     private int columnValue[];
     private int diagXxValue;
     private int diagYyValue;
+    private int countOfEmptyField;
 
     public Board(final int size) {
         this.size = size;
@@ -17,11 +18,16 @@ public class Board {
         this.columnValue = new int[size];
         this.diagXxValue = 0;
         this.diagYyValue = 0;
+        this.countOfEmptyField = size * size;
         clear();
     }
 
     public int getSize() {
         return size;
+    }
+
+    public int getCountOfEmptyField() {
+        return countOfEmptyField;
     }
 
     private void clear() {
@@ -41,6 +47,7 @@ public class Board {
                 && column >= 0 && column < size
                 && data[row][column] == PlayerSignType.EMPTY) {
             data[row][column] = sign;
+            countOfEmptyField -= 1;
             return true;
         }
         return false;
