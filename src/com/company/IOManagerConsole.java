@@ -16,6 +16,7 @@ public class IOManagerConsole implements IOManager {
 
     @Override
     public int getBoardSize(final int min, final int max) {
+        showMessage(PROVIDE_BOARD_SIZE_TEXT);
         int result = 0;
         do {
             result = getNumber();

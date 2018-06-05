@@ -94,7 +94,7 @@ public class Main {
     public static int getNumberFromUser(int min, int max) {
         int result = 0;
         do {
-            result = ioManager.getBoardSize();
+            result = ioManager.getBoardSize(min, max);
             if (result < min || result > max) {
                 System.out.println(WRONG_SIZE);
             }
