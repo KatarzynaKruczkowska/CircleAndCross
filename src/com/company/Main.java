@@ -43,8 +43,9 @@ public class Main {
         final String name = ioManager.getName();
         ioManager.showMessage(format(FORMATED_WELCOME, HELLO, name));
 
-        ioManager.showMessage(PROVIDE_BOARD_SIZE_TEXT);
-        final int boardSize = getNumberFromUser(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
+        //ioManager.showMessage(PROVIDE_BOARD_SIZE_TEXT);
+        //final int boardSize = getNumberFromUser(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
+        final int boardSize = ioManager.getBoardSize(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         ioManager.showMessage(format(FORMATED_SELECT, SELECTED, boardSize));
 
         final Board board = new Board(boardSize);

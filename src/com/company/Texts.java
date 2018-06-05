@@ -27,5 +27,5 @@ public class Texts {
     public static final String PROVIDE_YOUR_NAME = "Wprowadz swoje imię";
     public static final String DECISION_YES = "Tak";
     public static final String DECISION_NO = "Nie";
-    public static final String DECISION_PLEASE_TAKE = "Proszę zdecyduj wybierając jedną z poniższych opcji";
+    public static final String TAKE_DECISION = "Proszę zdecyduj wybierając jedną z poniższych opcji";
 }
