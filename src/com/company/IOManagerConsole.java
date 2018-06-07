@@ -89,10 +89,7 @@ public class IOManagerConsole implements IOManager {
         showMessage("1 - " + DECISION_YES);
         showMessage("2 - " + DECISION_NO);
         int result = getNumber();
-        if (result == 1) {
-            return true;
-        }
-        return false;
+        return result == 1;
     }
 
 

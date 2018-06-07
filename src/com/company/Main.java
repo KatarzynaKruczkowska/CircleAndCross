@@ -1,5 +1,6 @@
 package com.company;
 
+import java.security.cert.X509Certificate;
 import java.util.Scanner;
 
 import static com.company.Texts.*;
@@ -11,11 +12,11 @@ public class Main {
     public static final int MAX_BOARD_SIZE = 9;
     public static final int MIN_BOARD_ID = 1;
     private static final char BAD_SIGN = '@';
-    private static final char YES = 'T';
+    //private static final char YES = 'T';
     private static final String FORMATED_SELECT = "%s %d";
     private static final String FORMATED_PLAYER_AND_CHOICE = "%s %s %n %s %s %d %s %d %n";
     private static final String FORMATED_PLAYER = "%s %s %s %n";
-    private static final String FORMATED_WELCOME = "%s %s %n";
+    private static final String FORMATED_WELCOME = "%s %s %s %n";
 
     private static final Scanner INPUT = new Scanner(System.in);
     private static boolean shouldPlayAgain;
@@ -37,11 +38,17 @@ public class Main {
         int columnNumber = 0;
 
         shouldPlayAgain = true;
-        player = PlayerSignType.O;
+        // 1
+        ioManager.showMessage(PLAYER_1 + PROVIDE_YOUR_NAME);
+        String name = ioManager.getName();
+        final Player player1 = new Player(name, PlayerSignType.X);
+        ioManager.showMessage(format(FORMATED_WELCOME, HELLO, name, PlayerSignType.X.name()));
+        // 2
+        ioManager.showMessage(PLAYER_2 + PROVIDE_YOUR_NAME);
+        name = ioManager.getName();
+        final Player player2 = new Player(name, PlayerSignType.O);
+        ioManager.showMessage(format(FORMATED_WELCOME, HELLO, name, PlayerSignType.O.name()));
 
-        ioManager.showMessage(PROVIDE_YOUR_NAME);
-        final String name = ioManager.getName();
-        ioManager.showMessage(format(FORMATED_WELCOME, HELLO, name));
 
         //ioManager.showMessage(PROVIDE_BOARD_SIZE_TEXT);
         //final int boardSize = getNumberFromUser(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
@@ -50,7 +57,6 @@ public class Main {
 
         final Board board = new Board(boardSize);
 
-        player = changePlayer(player);
         do {
             ioManager.showBoard(board);
             System.out.printf(FORMATED_PLAYER, name, PLAYER, player);
