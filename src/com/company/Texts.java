@@ -22,7 +22,7 @@ public class Texts {
     public static final String PLAY_AGAIN = "Czy chcesz zagrać jeszcze raz?";
     public static final String PROVIDE_COLUMN = "Podaj kolumnę (a, b, c...)";
     public static final String NOT_EMPTY_PLACE = "Wybrane miejsce jest już zajęte, spróbuj jeszcze raz";
-    public static final String WINNER = "WYGRANA !!!, gratulacje dla gracza";
+    public static final String WINNER = "WYGRANA !!!, Wygrał gracz o imieniu";
     public static final String ROW = "wiersz";
     public static final String COLUMN = "kolumna";
     public static final String END_OF_THE_GAME = "Koniec rozgrywki";

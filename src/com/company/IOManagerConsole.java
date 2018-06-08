@@ -78,7 +78,7 @@ public class IOManagerConsole implements IOManager {
             }
             // obsługa esc
         } while (column < minId || column > maxId);
-        Coordinates coordinates = new Coordinates(row, column);
+        Coordinates coordinates = new Coordinates(row - 1, column - 1);
         return coordinates;
         //return null; //jak przypisać row i column? i jak zrobic return?
     }
