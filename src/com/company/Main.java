@@ -1,7 +1,5 @@
 package com.company;
 
-import java.util.Scanner;
-
 import static com.company.Texts.*;
 import static java.lang.String.*;
 
@@ -10,14 +8,11 @@ public class Main {
     public static final int MIN_BOARD_SIZE = 2;
     public static final int MAX_BOARD_SIZE = 9;
     private static final int MIN_BOARD_ID = 1;
-    //  private static final char BAD_SIGN = '@';
-    private static final String FORMATED_SELECT = "%s %d";
-    private static final String FORMATED_PLAYER_AND_CHOICE = "%s %s %n %s %s %d %s %d %n";
-    private static final String FORMATED_PLAYER = "%s %s %s %n";
-    private static final String FORMATED_WELCOME = "%s %s %s %s %n";
+    private static final String FORMATED_SELECT = "%s %d %n";
+    private static final String FORMATED_CHOICE = "%s %s %d %s %d %n";
+    private static final String FORMATED_PLAYER = "%s (%s) %n";
     private static final String FORMATED_WINNER = "%s %s (%s) %n";
 
-    // private static final Scanner INPUT = new Scanner(System.in);
     private static boolean shouldPlayAgain;
     private static Player player;
 
@@ -38,15 +33,11 @@ public class Main {
 
         shouldPlayAgain = true;
         // 1
-        ioManager.showMessage(PLAYER_1 + PROVIDE_YOUR_NAME);
-        String name = ioManager.getName();
+        String name = ioManager.getName(PLAYER_1);
         final Player player1 = new Player(name, PlayerSignType.X);
-        ioManager.showMessage(format(FORMATED_WELCOME, HELLO, name, PLAYER, PlayerSignType.X));
         // 2
-        ioManager.showMessage(PLAYER_2 + PROVIDE_YOUR_NAME);
-        name = ioManager.getName();
+        name = ioManager.getName(PLAYER_2);
         final Player player2 = new Player(name, PlayerSignType.O);
-        ioManager.showMessage(format(FORMATED_WELCOME, HELLO, name, PLAYER, PlayerSignType.O));
 
         final int boardSize = ioManager.getBoardSize(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         ioManager.showMessage(format(FORMATED_SELECT, SELECTED, boardSize));
@@ -55,14 +46,14 @@ public class Main {
         player = player1;
         do {
             ioManager.showBoard(board);
-            System.out.printf(FORMATED_PLAYER, player.getName(), PLAYER, player.getSign());
+            System.out.printf(FORMATED_PLAYER, player.getName(), player.getSign());
 
             Coordinates rowAndColumn = new Coordinates(rowNumber, columnNumber);
             rowAndColumn = ioManager.getCoordinates(MIN_BOARD_ID, boardSize);
             rowNumber = rowAndColumn.getRow();
             columnNumber = rowAndColumn.getColumn();
 
-            System.out.printf(FORMATED_PLAYER_AND_CHOICE, PLAYER, player.getName(), SELECTED, ROW, rowNumber + 1, COLUMN, columnNumber + 1);
+            System.out.printf(FORMATED_CHOICE, SELECTED, ROW, rowNumber + 1, COLUMN, columnNumber + 1);
 
             if (board.insertSign(player.getSign(), rowNumber, columnNumber)) {
                 board.addSignValue(rowNumber, columnNumber);

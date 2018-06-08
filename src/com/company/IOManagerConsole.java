@@ -3,11 +3,12 @@ package com.company;
 import java.util.Scanner;
 
 import static com.company.Texts.*;
+import static java.lang.String.format;
 
 public class IOManagerConsole implements IOManager {
 
     private final Scanner INPUT = new Scanner(System.in);
-
+    private static final String FORMATED_PROVIDE_NAME = "%s %s %n";
 
     @Override
     public void showMessage(final String message) {
@@ -40,7 +41,8 @@ public class IOManagerConsole implements IOManager {
     }
 
     @Override
-    public String getName() {
+    public String getName(final String player) {
+        showMessage(format(FORMATED_PROVIDE_NAME, player, PROVIDE_YOUR_NAME));
         String result = "";
         Scanner INPUT = new Scanner(System.in);
         try {
