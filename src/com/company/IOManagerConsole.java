@@ -52,18 +52,17 @@ public class IOManagerConsole implements IOManager {
     }
 
     @Override
-    public Coordinates getCoordinates(final int min_id, final Board board) {
+    public Coordinates getCoordinates(final int minId, final int maxId) {
 
-        final int max_id = board.getSize();
         int row = 1;
         int column = 1;
         showMessage(PROVIDE_ROW_NUMBER);
         do {
             row = getNumber();
-            if (row < min_id || row > max_id) {
+            if (row < minId || row > maxId) {
                 showMessage(WRONG_SIZE);
             }
-        } while (row < min_id || row > max_id);
+        } while (row < minId || row > maxId);
 
         showMessage(PROVIDE_COLUMN);
         final String inputText = INPUT.nextLine();
@@ -74,12 +73,14 @@ public class IOManagerConsole implements IOManager {
                 continue;
             }
             column = inputText.toUpperCase().charAt(0) - 'A' + 1;
-            if (column < min_id || column > max_id) {
+            if (column < minId || column > maxId) {
                 showMessage(WRONG_SIZE);
             }
             // obsługa esc
-        } while (column < min_id || column > max_id);
-        return null; //jak przypisać row i column? i jak zrobic return?
+        } while (column < minId || column > maxId);
+        Coordinates coordinates = new Coordinates(row, column);
+        return coordinates;
+        //return null; //jak przypisać row i column? i jak zrobic return?
     }
 
     @Override

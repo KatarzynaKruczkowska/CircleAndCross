@@ -19,7 +19,7 @@ public class Texts {
     public static final String WRONG_FORMAT = "Wprowadzona wartość w złym formacie";
     public static final String PROVIDE_ROW_NUMBER = "Podaj numer wiersza";
     public static final String SELECTED = "Wybrano";
-    public static final String AGAIN_PLAY = "Czy chcesz zagrać jeszcze raz?";
+    public static final String PLAY_AGAIN = "Czy chcesz zagrać jeszcze raz?";
     public static final String PROVIDE_COLUMN = "Podaj kolumnę (a, b, c...)";
     public static final String NOT_EMPTY_PLACE = "Wybrane miejsce jest już zajęte, spróbuj jeszcze raz";
     public static final String WINNER = "WYGRANA !!!, gratulacje dla gracza";

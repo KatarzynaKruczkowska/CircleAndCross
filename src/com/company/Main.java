@@ -1,6 +1,5 @@
 package com.company;
 
-import java.security.cert.X509Certificate;
 import java.util.Scanner;
 
 import static com.company.Texts.*;
@@ -12,7 +11,6 @@ public class Main {
     public static final int MAX_BOARD_SIZE = 9;
     public static final int MIN_BOARD_ID = 1;
     private static final char BAD_SIGN = '@';
-    //private static final char YES = 'T';
     private static final String FORMATED_SELECT = "%s %d";
     private static final String FORMATED_PLAYER_AND_CHOICE = "%s %s %n %s %s %d %s %d %n";
     private static final String FORMATED_PLAYER = "%s %s %s %n";
@@ -29,7 +27,7 @@ public class Main {
         boolean notEnd = true;
         do {
             play();
-            notEnd = ioManager.getDecision(AGAIN_PLAY);
+            notEnd = ioManager.getDecision(PLAY_AGAIN);
         } while (notEnd);
     }
 
@@ -60,8 +58,13 @@ public class Main {
         do {
             ioManager.showBoard(board);
             System.out.printf(FORMATED_PLAYER, name, PLAYER, player);
-            rowNumber = getRowNumber(MIN_BOARD_ID, boardSize);
-            columnNumber = getColumnNumber(boardSize);
+
+            //rowNumber = getRowNumber(MIN_BOARD_ID, boardSize);
+            //columnNumber = getColumnNumber(boardSize);
+
+            Coordinates rowAndColumn = new Coordinates(rowNumber, columnNumber);
+            rowAndColumn = ioManager.getCoordinates(MIN_BOARD_ID, boardSize);
+
             System.out.printf(FORMATED_PLAYER_AND_CHOICE, PLAYER, player, SELECTED, ROW, rowNumber + 1, COLUMN, columnNumber + 1);
 
             if (board.insertSign(player, rowNumber, columnNumber)) {

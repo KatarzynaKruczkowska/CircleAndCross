@@ -8,7 +8,7 @@ public interface IOManager {
 
     public String getName();
 
-    public Coordinates getCoordinates(final int min_id, final Board board);
+    public Coordinates getCoordinates(final int minId, final int maxId);
 
     public boolean getDecision(final String message);
 
