@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Random;
+
 import static com.company.Texts.*;
 import static java.lang.String.format;
 
@@ -22,7 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
         ioManager.showMessage(WELCOME);
-        boolean notEnd = true;
+        boolean notEnd;
         do {
             play();
             notEnd = ioManager.getDecision(PLAY_AGAIN);
@@ -75,6 +77,11 @@ public class Main {
             }
         } while (shouldPlayAgain);
         ioManager.showMessage(END_OF_THE_GAME);
+    }
+
+    public static int getRandomPlayerIndex(final int playerCount) {
+        final Random random = new Random();
+        return random.nextInt(playerCount);
     }
 
 }
