@@ -6,7 +6,7 @@ public interface IOManager {
 
     public int getBoardSize(final int min, final int max);
 
-    public String getName(final String player);
+    public String getName();
 
     public Coordinates getCoordinates(final int minId, final int maxId);
 

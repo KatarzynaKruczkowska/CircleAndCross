@@ -11,9 +11,8 @@ public class Texts {
             "Wybieraj tak, żeby uzupełnić jednakowym symbolem wszystkie pola w rzędzie, kolumnie, lub po przekątnej\n" +
             "Dobrej zabawy!!!";
     public static final String HELLO = "Witaj";
-    public static final String PLAYER = "grasz jako";
-    public static final String PLAYER_1 = "Gracz 1";
-    public static final String PLAYER_2 = "Gracz 2";
+    public static final String PLAYING_AS = "grasz jako";
+    public static final String PLAYER = "Gracz";
     public static final String PROVIDE_BOARD_SIZE_TEXT = "Wpisz wielkość planszy >=" + MIN_BOARD_SIZE + " i <=" + MAX_BOARD_SIZE;
     public static final String WRONG_SIZE = "Wprowadzono wartość spoza zakresu, spróbuj jeszcze raz";
     public static final String WRONG_FORMAT = "Wprowadzona wartość w złym formacie";
