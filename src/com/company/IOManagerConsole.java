@@ -52,9 +52,30 @@ public class IOManagerConsole implements IOManager {
 
     @Override
     public Coordinates getCoordinates(final int minId, final int maxId) {
+        final int row = getRow(minId, maxId);
+        final int column = getColumn(minId, maxId);
+        return new Coordinates(row - 1, column - 1);
+    }
 
+    private int getColumn(final int minId, final int maxId) {
+        int column = -1;
+        showMessage(PROVIDE_COLUMN);
+        do {
+            final String inputText = INPUT.nextLine();
+            if (inputText.length() == 1) {
+                column = inputText.toUpperCase().charAt(0) - 'A' + 1;
+                if (column < minId || column > maxId) {
+                    showMessage(WRONG_SIZE);
+                }
+            } else {
+                showMessage(WRONG_SIZE);
+            }
+        } while (column < minId || column > maxId);
+        return column;
+    }
+
+    private int getRow(final int minId, final int maxId) {
         int row;
-        int column = 1;
         showMessage(PROVIDE_ROW_NUMBER);
         do {
             row = getNumber();
@@ -62,22 +83,7 @@ public class IOManagerConsole implements IOManager {
                 showMessage(WRONG_SIZE);
             }
         } while (row < minId || row > maxId);
-
-        showMessage(PROVIDE_COLUMN);
-        final String inputText = INPUT.nextLine();
-        do {
-
-            if (inputText.length() != 1) {
-                showMessage(WRONG_SIZE);
-                continue;
-            }
-            column = inputText.toUpperCase().charAt(0) - 'A' + 1;
-            if (column < minId || column > maxId) {
-                showMessage(WRONG_SIZE);
-            }
-            // obsługa esc
-        } while (column < minId || column > maxId);
-        return new Coordinates(row - 1, column - 1);
+        return row;
     }
 
     @Override
