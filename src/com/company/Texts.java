@@ -29,5 +29,5 @@ public class Texts {
     public static final String DECISION_YES = "Tak";
     public static final String DECISION_NO = "Nie";
     public static final String TAKE_DECISION = "Proszę zdecyduj wybierając jedną z poniższych opcji";
-    public static final String DRAWN_PLAYER = "Jako pierwszegy gra";
+    public static final String DRAWN_PLAYER = "Jako pierwszy gra";
 }

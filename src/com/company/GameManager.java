@@ -4,7 +4,6 @@ import java.util.Random;
 
 import static com.company.Main.ioManager;
 import static com.company.Texts.*;
-//import static com.company.Texts.END_OF_THE_GAME;
 import static java.lang.String.format;
 
 public class GameManager {
@@ -20,47 +19,44 @@ public class GameManager {
     private static final String FORMATTED_PROVIDE_NAME = "%s %d %s \n";
     private static final String FORMATED_WELCOME = "%s %s %s %s \n";
 
-    private static void play() {
+    public static void play() {
 
         boolean shouldPlayAgain = true;
-        String tableOfPlayers[][] = new String[NUMBER_OF_PLAYERS][2];
-
-        // 1
-        ioManager.showMessage(format(FORMATTED_PROVIDE_NAME, PLAYER, 1, PROVIDE_YOUR_NAME));
-        String name = ioManager.getName();
+        Player tableOfPlayers[] = new Player[NUMBER_OF_PLAYERS];
         PlayerSignType sign = PlayerSignType.O;
-        if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 0) {
-            sign = PlayerSignType.X;
+
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
+            ioManager.showMessage(format(FORMATTED_PROVIDE_NAME, PLAYER, i + 1, PROVIDE_YOUR_NAME));
+            String name = ioManager.getName();
+
+            if (i == 0) {
+                if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 0) {
+                    sign = PlayerSignType.X;
+                }
+            } else {
+                if (sign == PlayerSignType.X) {
+                    sign = PlayerSignType.O;
+                } else {
+                    sign = PlayerSignType.X;
+                }
+            }
+
+            final Player currentplayer = new Player(name, sign);
+            tableOfPlayers[i] = currentplayer;
+
+            ioManager.showMessage(format(FORMATED_WELCOME, HELLO, currentplayer.getName(), PLAYING_AS, currentplayer.getSign()));
+
         }
-
-//tylko po co mi tablica skoro mam imię i znak przypisane do obiektu Player (1 i 2)
-        final Player player1 = new Player(name, sign);
-        tableOfPlayers[0][0] = name;
-        tableOfPlayers[0][1] = sign.printableSign;
-
-        ioManager.showMessage(format(FORMATED_WELCOME, HELLO, player1.getName(), PLAYING_AS, player1.getSign()));
-
-        // 2
-        ioManager.showMessage(format(FORMATTED_PROVIDE_NAME, PLAYER, 2, PROVIDE_YOUR_NAME));
-        name = ioManager.getName();
-        if (sign == PlayerSignType.X) {
-            sign = PlayerSignType.O;
-        } else {
-            sign = PlayerSignType.X;
-        }
-        final Player player2 = new Player(name, sign);
-        tableOfPlayers[1][0] = name;
-        tableOfPlayers[1][1] = sign.printableSign;
-
-        ioManager.showMessage(format(FORMATED_WELCOME, HELLO, player2.getName(), PLAYING_AS, player2.getSign()));
 
         final int boardSize = ioManager.getBoardSize(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         ioManager.showMessage(format(FORMATED_SELECT, SELECTED, boardSize));
         final Board board = new Board(boardSize);
-        Player currentPlayer = player1;
+
+        Player currentPlayer = tableOfPlayers[0];
         if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 1) {
-            currentPlayer = player2;
+            currentPlayer = tableOfPlayers[1];
         }
+
         ioManager.showMessage(DRAWN_PLAYER);
         ioManager.showMessage(format(FORMATED_PLAYER, currentPlayer.getName(), currentPlayer.getSign()));
 
@@ -83,10 +79,10 @@ public class GameManager {
                     ioManager.showBoard(board);
                     shouldPlayAgain = false;
                 }
-                if (currentPlayer == player1) {
-                    currentPlayer = player2;
+                if (currentPlayer == tableOfPlayers[0]) {
+                    currentPlayer = tableOfPlayers[1];
                 } else {
-                    currentPlayer = player1;
+                    currentPlayer = tableOfPlayers[0];
                 }
             } else {
                 ioManager.showMessage(NOT_EMPTY_PLACE);
