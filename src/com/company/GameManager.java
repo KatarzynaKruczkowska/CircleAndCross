@@ -22,29 +22,24 @@ public class GameManager {
     public static void play() {
 
         boolean shouldPlayAgain = true;
-        Player tableOfPlayers[] = new Player[NUMBER_OF_PLAYERS];
-        PlayerSignType sign = PlayerSignType.O;
+        final Player players[] = new Player[NUMBER_OF_PLAYERS];
+        final PlayerSignType sign[] = new PlayerSignType[NUMBER_OF_PLAYERS];
+
+        if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 0) {
+            sign[0] = PlayerSignType.X;
+            sign[1] = PlayerSignType.O;
+        } else {
+            sign[0] = PlayerSignType.O;
+            sign[1] = PlayerSignType.X;
+        }
 
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             ioManager.showMessage(format(FORMATTED_PROVIDE_NAME, PLAYER, i + 1, PROVIDE_YOUR_NAME));
             String name = ioManager.getName();
 
-            if (i == 0) {
-                if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 0) {
-                    sign = PlayerSignType.X;
-                }
-            } else {
-                if (sign == PlayerSignType.X) {
-                    sign = PlayerSignType.O;
-                } else {
-                    sign = PlayerSignType.X;
-                }
-            }
+            players[i] = new Player(name, sign[i]);
 
-            final Player currentplayer = new Player(name, sign);
-            tableOfPlayers[i] = currentplayer;
-
-            ioManager.showMessage(format(FORMATED_WELCOME, HELLO, currentplayer.getName(), PLAYING_AS, currentplayer.getSign()));
+            ioManager.showMessage(format(FORMATED_WELCOME, HELLO, players[i].getName(), PLAYING_AS, players[i].getSign()));
 
         }
 
@@ -52,9 +47,9 @@ public class GameManager {
         ioManager.showMessage(format(FORMATED_SELECT, SELECTED, boardSize));
         final Board board = new Board(boardSize);
 
-        Player currentPlayer = tableOfPlayers[0];
+        Player currentPlayer = players[0];
         if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 1) {
-            currentPlayer = tableOfPlayers[1];
+            currentPlayer = players[1];
         }
 
         ioManager.showMessage(DRAWN_PLAYER);
@@ -79,10 +74,10 @@ public class GameManager {
                     ioManager.showBoard(board);
                     shouldPlayAgain = false;
                 }
-                if (currentPlayer == tableOfPlayers[0]) {
-                    currentPlayer = tableOfPlayers[1];
+                if (currentPlayer == players[0]) {
+                    currentPlayer = players[1];
                 } else {
-                    currentPlayer = tableOfPlayers[0];
+                    currentPlayer = players[0];
                 }
             } else {
                 ioManager.showMessage(NOT_EMPTY_PLACE);
