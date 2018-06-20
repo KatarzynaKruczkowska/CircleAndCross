@@ -21,13 +21,11 @@ public class GameManager {
 
     public void play() {
 
-        final Player players[] = new Player[NUMBER_OF_PLAYERS];
-        initPlayers(players);
-        playGame(players);
+        playGame();
         ioManager.showMessage(END_OF_THE_GAME);
     }
 
-    public static int getRandomPlayerIndex(final int playerCount) {
+    private int getRandomPlayerIndex(final int playerCount) {
         final Random random = new Random();
         return random.nextInt(playerCount);
     }
@@ -51,7 +49,11 @@ public class GameManager {
         }
     }
 
-    public void playGame(Player players[]) {
+    public void playGame() {
+
+        final Player players[] = new Player[NUMBER_OF_PLAYERS];
+        initPlayers(players);
+
         boolean shouldPlayAgain = true;
         final int boardSize = ioManager.getBoardSize(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         ioManager.showMessage(format(FORMATED_SELECT, SELECTED, boardSize));
@@ -62,8 +64,9 @@ public class GameManager {
         ioManager.showMessage(format(FORMATED_PLAYER, players[activePlayerId].getName(), players[activePlayerId].getSign()));
 
         do {
+            final Player player = players[activePlayerId];
             ioManager.showBoard(board);
-            ioManager.showMessage(format(FORMATED_PLAYER, players[activePlayerId].getName(), players[activePlayerId].getSign()));
+            ioManager.showMessage(format(FORMATED_PLAYER, player.getName(), player.getSign()));
 
             final Coordinates coordinates = ioManager.getCoordinates(MIN_BOARD_ID, boardSize);
 
@@ -73,7 +76,7 @@ public class GameManager {
                 board.addSignValue(coordinates.row, coordinates.column);
                 if (board.checkWinner(coordinates.row, coordinates.column)) {
                     ioManager.showBoard(board);
-                    ioManager.showMessage(format(FORMATED_WINNER, WINNER, players[activePlayerId].getName(), players[activePlayerId].getSign()));
+                    ioManager.showMessage(format(FORMATED_WINNER, WINNER, player.getName(), player.getSign()));
                     shouldPlayAgain = false;
                 }
                 if (board.getCountOfEmptyField() == 0) {
