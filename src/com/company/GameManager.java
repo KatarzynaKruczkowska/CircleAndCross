@@ -20,8 +20,10 @@ public class GameManager {
     private static final String FORMATED_WELCOME = "%s %s %s %s \n";
 
     public void play() {
-
-        playGame();
+        //final Player players[] = new Player[NUMBER_OF_PLAYERS];
+        //initPlayers(players);
+        final Player players[] = initPlayers();
+        playGame(players);
         ioManager.showMessage(END_OF_THE_GAME);
     }
 
@@ -30,7 +32,8 @@ public class GameManager {
         return random.nextInt(playerCount);
     }
 
-    public void initPlayers(Player players[]) {
+    public Player[] initPlayers() {
+        final Player players[] = new Player[NUMBER_OF_PLAYERS];
         final PlayerSignType sign[] = new PlayerSignType[NUMBER_OF_PLAYERS];
 
         if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 0) {
@@ -47,12 +50,11 @@ public class GameManager {
             players[i] = new Player(name, sign[i]);
             ioManager.showMessage(format(FORMATED_WELCOME, HELLO, players[i].getName(), PLAYING_AS, players[i].getSign()));
         }
+        return players;
     }
 
-    public void playGame() {
+    public void playGame(Player[] players) {
 
-        final Player players[] = new Player[NUMBER_OF_PLAYERS];
-        initPlayers(players);
 
         boolean shouldPlayAgain = true;
         final int boardSize = ioManager.getBoardSize(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
