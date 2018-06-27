@@ -36,13 +36,7 @@ public class GameManager {
         final Player players[] = new Player[NUMBER_OF_PLAYERS];
         final PlayerSignType sign[] = new PlayerSignType[NUMBER_OF_PLAYERS];
 
-        if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 0) {
-            sign[0] = PlayerSignType.X;
-            sign[1] = PlayerSignType.O;
-        } else {
-            sign[0] = PlayerSignType.O;
-            sign[1] = PlayerSignType.X;
-        }
+        putSign(sign);
 
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             ioManager.showMessage(format(FORMATTED_PROVIDE_NAME, PLAYER, i + 1, PROVIDE_YOUR_NAME));
@@ -53,7 +47,17 @@ public class GameManager {
         return players;
     }
 
-    public void playGame(Player[] players) {
+    private void putSign(PlayerSignType[] sign) {
+        if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 0) {
+            sign[0] = PlayerSignType.X;
+            sign[1] = PlayerSignType.O;
+        } else {
+            sign[0] = PlayerSignType.O;
+            sign[1] = PlayerSignType.X;
+        }
+    }
+
+    public final void playGame(Player[] players) {
 
 
         boolean shouldPlayAgain = true;
@@ -81,7 +85,7 @@ public class GameManager {
                     ioManager.showMessage(format(FORMATED_WINNER, WINNER, player.getName(), player.getSign()));
                     shouldPlayAgain = false;
                 }
-                if (board.getCountOfEmptyField() == 0) {
+                if (board.getCountOfEmptyField() == 0 && shouldPlayAgain == true) {
                     ioManager.showBoard(board);
                     shouldPlayAgain = false;
                 }
