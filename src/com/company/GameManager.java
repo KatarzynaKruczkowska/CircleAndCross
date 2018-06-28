@@ -8,8 +8,8 @@ import static java.lang.String.format;
 
 public class GameManager {
 
-    public static final int MIN_BOARD_SIZE = 2;
-    public static final int MAX_BOARD_SIZE = 9;
+    static final int MIN_BOARD_SIZE = 2;
+    static final int MAX_BOARD_SIZE = 9;
     private static final int MIN_BOARD_ID = 1;
     private static final int NUMBER_OF_PLAYERS = 2;
     private static final String FORMATED_SELECT = "%s %d \n";
@@ -57,7 +57,7 @@ public class GameManager {
         }
     }
 
-    public final void playGame(Player[] players) {
+    public void playGame(final Player[] players) {
 
 
         boolean shouldPlayAgain = true;
