@@ -1,7 +1,7 @@
 package com.company;
 
-import static com.company.Main.MAX_BOARD_SIZE;
-import static com.company.Main.MIN_BOARD_SIZE;
+import static com.company.GameManager.MAX_BOARD_SIZE;
+import static com.company.GameManager.MIN_BOARD_SIZE;
 
 public class Texts {
     public final static String WELCOME = "Witam w grze kółko i krzyżyk.\n" +
@@ -29,4 +29,5 @@ public class Texts {
     public static final String DECISION_YES = "Tak";
     public static final String DECISION_NO = "Nie";
     public static final String TAKE_DECISION = "Proszę zdecyduj wybierając jedną z poniższych opcji";
+    public static final String DRAWN_PLAYER = "Jako pierwszy gra";
 }
