@@ -1,6 +1,6 @@
 package com.company;
 
-import java.util.Random;
+import java.util.*;
 
 import static com.company.Texts.*;
 import static java.lang.String.format;
@@ -24,10 +24,8 @@ public class GameManager {
         this.ioManager = ioManager;
     }
 
-    public void play() {
-        //final Player players[] = new Player[NUMBER_OF_PLAYERS];
-        //initPlayers(players);
-        final Player players[] = initPlayers(NUMBER_OF_PLAYERS);
+    public void play() throws TooManyPlayersException {
+        final List<Player> players = initPlayers(NUMBER_OF_PLAYERS);
         playGame(players);
         ioManager.showMessage(END_OF_THE_GAME);
     }
@@ -37,45 +35,37 @@ public class GameManager {
         return random.nextInt(playerCount);
     }
 
-    public Player[] initPlayers(final int playersCount) {
-        final Player players[] = new Player[playersCount];
-        final PlayerSignType sign[] = new PlayerSignType[playersCount];
+    public List<Player> initPlayers(final int playersCount) throws TooManyPlayersException {
+        final List<PlayerSignType> sign = new ArrayList<>(Arrays.asList(PlayerSignType.values()));
+        sign.remove(PlayerSignType.EMPTY);
 
-        putSign(sign, playersCount);
+        if (sign.size() < playersCount) {
+            throw new TooManyPlayersException();
+        }
 
+        Collections.shuffle(sign);
+
+        final List<Player> players = new ArrayList<>(playersCount);
         for (int i = 0; i < playersCount; i++) {
             ioManager.showMessage(format(FORMATTED_PROVIDE_NAME, PLAYER, i + 1, PROVIDE_YOUR_NAME));
             String name = ioManager.getName();
-            players[i] = new Player(name, sign[i]);
-            ioManager.showMessage(format(FORMATED_WELCOME, HELLO, players[i].getName(), PLAYING_AS, players[i].getSign()));
+            players.add(new Player(name, sign.get(i)));
+            ioManager.showMessage(format(FORMATED_WELCOME, HELLO, players.get(i).getName(), PLAYING_AS, players.get(i).getSign()));
         }
         return players;
     }
 
-    private void putSign(final PlayerSignType[] sign, final int playersCount) {
-        if (getRandomPlayerIndex(playersCount) == 0) {
-            sign[0] = PlayerSignType.X;
-            sign[1] = PlayerSignType.O;
-        } else {
-            sign[0] = PlayerSignType.O;
-            sign[1] = PlayerSignType.X;
-        }
-    }
-
-    public void playGame(final Player[] players) {
-
-
+    private void playGame(final List<Player> players) {
         boolean shouldPlayAgain = true;
         final int boardSize = ioManager.getBoardSize(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         ioManager.showMessage(format(FORMATED_SELECT, SELECTED, boardSize));
         final Board board = new Board(boardSize);
         int activePlayerId = getRandomPlayerIndex(NUMBER_OF_PLAYERS);
 
-        ioManager.showMessage(DRAWN_PLAYER);
-        ioManager.showMessage(format(FORMATED_PLAYER, players[activePlayerId].getName(), players[activePlayerId].getSign()));
+        ioManager.showMessage(DRAWN_PLAYER + "\n" + format(FORMATED_PLAYER, players.get(activePlayerId).getName(), players.get(activePlayerId).getSign()));
 
         do {
-            final Player player = players[activePlayerId];
+            final Player player = players.get(activePlayerId);
             ioManager.showBoard(board);
             ioManager.showMessage(format(FORMATED_PLAYER, player.getName(), player.getSign()));
 
@@ -83,7 +73,7 @@ public class GameManager {
 
             ioManager.showMessage(format(FORMATED_CHOICE, SELECTED, ROW, coordinates.row + 1, COLUMN, coordinates.column + 1));
 
-            if (board.insertSign(players[activePlayerId].getSign(), coordinates.row, coordinates.column)) {
+            if (board.insertSign(players.get(activePlayerId).getSign(), coordinates.row, coordinates.column)) {
                 board.addSignValue(coordinates.row, coordinates.column);
                 if (board.checkWinner(coordinates.row, coordinates.column)) {
                     ioManager.showBoard(board);

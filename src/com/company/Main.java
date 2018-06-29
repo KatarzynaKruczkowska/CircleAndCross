@@ -11,7 +11,11 @@ public class Main {
         ioManager.showMessage(WELCOME);
         boolean notEnd;
         do {
-            gameManager.play();
+            try {
+                gameManager.play();
+            } catch (TooManyPlayersException error) {
+                ioManager.showMessage("Too many players! Please play again with smaller amount.");
+            }
             notEnd = ioManager.getDecision(PLAY_AGAIN);
         } while (notEnd);
     }
