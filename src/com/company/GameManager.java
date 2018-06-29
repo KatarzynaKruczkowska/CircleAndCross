@@ -2,7 +2,6 @@ package com.company;
 
 import java.util.Random;
 
-import static com.company.Main.ioManager;
 import static com.company.Texts.*;
 import static java.lang.String.format;
 
@@ -19,10 +18,16 @@ public class GameManager {
     private static final String FORMATTED_PROVIDE_NAME = "%s %d %s \n";
     private static final String FORMATED_WELCOME = "%s %s %s %s \n";
 
+    private final IOManager ioManager;
+
+    public GameManager(final IOManager ioManager) {
+        this.ioManager = ioManager;
+    }
+
     public void play() {
         //final Player players[] = new Player[NUMBER_OF_PLAYERS];
         //initPlayers(players);
-        final Player players[] = initPlayers();
+        final Player players[] = initPlayers(NUMBER_OF_PLAYERS);
         playGame(players);
         ioManager.showMessage(END_OF_THE_GAME);
     }
@@ -32,13 +37,13 @@ public class GameManager {
         return random.nextInt(playerCount);
     }
 
-    public Player[] initPlayers() {
-        final Player players[] = new Player[NUMBER_OF_PLAYERS];
-        final PlayerSignType sign[] = new PlayerSignType[NUMBER_OF_PLAYERS];
+    public Player[] initPlayers(final int playersCount) {
+        final Player players[] = new Player[playersCount];
+        final PlayerSignType sign[] = new PlayerSignType[playersCount];
 
-        putSign(sign);
+        putSign(sign, playersCount);
 
-        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
+        for (int i = 0; i < playersCount; i++) {
             ioManager.showMessage(format(FORMATTED_PROVIDE_NAME, PLAYER, i + 1, PROVIDE_YOUR_NAME));
             String name = ioManager.getName();
             players[i] = new Player(name, sign[i]);
@@ -47,8 +52,8 @@ public class GameManager {
         return players;
     }
 
-    private void putSign(PlayerSignType[] sign) {
-        if (getRandomPlayerIndex(NUMBER_OF_PLAYERS) == 0) {
+    private void putSign(final PlayerSignType[] sign, final int playersCount) {
+        if (getRandomPlayerIndex(playersCount) == 0) {
             sign[0] = PlayerSignType.X;
             sign[1] = PlayerSignType.O;
         } else {
@@ -85,7 +90,7 @@ public class GameManager {
                     ioManager.showMessage(format(FORMATED_WINNER, WINNER, player.getName(), player.getSign()));
                     shouldPlayAgain = false;
                 }
-                if (board.getCountOfEmptyField() == 0 && shouldPlayAgain == true) {
+                if (board.getCountOfEmptyField() == 0 && shouldPlayAgain) {
                     ioManager.showBoard(board);
                     shouldPlayAgain = false;
                 }
