@@ -15,7 +15,16 @@ public class BoardTest {
 
     @Before
     public void onBefore() {
-        board = new Board(3);
+//        final OnEndGameListener onEndGameMock = new OnEndGameListener() {
+//            @Override
+//            public void onEndGame(PlayerSignType sign) {
+//
+//            }
+//        };
+//        board = new Board(3, onEndGameMock);
+
+        board = new Board(3, sign -> {
+        });
     }
 
     @After

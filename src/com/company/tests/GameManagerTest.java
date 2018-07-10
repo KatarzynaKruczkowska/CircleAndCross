@@ -27,18 +27,24 @@ public class GameManagerTest {
 
     @Test
     public void initTwoPlayers() {
+
+        //Given
         List<Player> result = null;
+
+        //When
         try {
             result = gameManager.initPlayers(2);
         } catch (TooManyPlayersException e) {
             e.printStackTrace();
         }
 
+        //Then
         assertEquals(2, result.size());
     }
 
     @Test(expected = TooManyPlayersException.class)
     public void initFivePlayers() throws TooManyPlayersException {
+        //When
         gameManager.initPlayers(5);
     }
 }

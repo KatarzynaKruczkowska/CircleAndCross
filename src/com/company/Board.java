@@ -11,8 +11,11 @@ public class Board {
     private int diagYyValue;
     private int countOfEmptyField;
 
-    public Board(final int size) {
+    private final OnEndGameListener onEndGameListener;
+
+    public Board(final int size, final OnEndGameListener onEndGameListener) {
         this.size = size;
+        this.onEndGameListener = onEndGameListener;
         data = new PlayerSignType[size][size];
         this.rowValue = new int[size];
         this.columnValue = new int[size];
@@ -48,12 +51,18 @@ public class Board {
                 && data[row][column] == PlayerSignType.EMPTY) {
             data[row][column] = sign;
             countOfEmptyField -= 1;
+            addSignValue(row, column);
+            if (checkWinner(row, column)) {
+                onEndGameListener.onEndGame(sign);
+            } else if (countOfEmptyField == 0) {
+                onEndGameListener.onEndGame(null);
+            }
             return true;
         }
         return false;
     }
 
-    public void addSignValue(final int row, final int column) {
+    private void addSignValue(final int row, final int column) {
         rowValue[row] += data[row][column].intValue;
         columnValue[column] += data[row][column].intValue;
         if (row == column) {
@@ -64,7 +73,7 @@ public class Board {
         }
     }
 
-    public boolean checkWinner(final int row, final int column) {
+    private boolean checkWinner(final int row, final int column) {
         return abs(rowValue[row]) == size
                 || abs(columnValue[column]) == size
                 || abs(diagXxValue) == size

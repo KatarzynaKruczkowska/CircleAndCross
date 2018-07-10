@@ -5,7 +5,7 @@ import java.util.*;
 import static com.company.Texts.*;
 import static java.lang.String.format;
 
-public class GameManager {
+public class GameManager /*implements OnEndGameListener*/ {
 
     static final int MIN_BOARD_SIZE = 2;
     static final int MAX_BOARD_SIZE = 9;
@@ -19,13 +19,16 @@ public class GameManager {
     private static final String FORMATED_WELCOME = "%s %s %s %s \n";
 
     private final IOManager ioManager;
+    private List<Player> players;
+    private Board board;
+    private boolean shouldContinue;
 
     public GameManager(final IOManager ioManager) {
         this.ioManager = ioManager;
     }
 
     public void play() throws TooManyPlayersException {
-        final List<Player> players = initPlayers(NUMBER_OF_PLAYERS);
+        players = initPlayers(NUMBER_OF_PLAYERS);
         playGame(players);
         ioManager.showMessage(END_OF_THE_GAME);
     }
@@ -55,11 +58,48 @@ public class GameManager {
         return players;
     }
 
+    private void onEndGame(final Player player) {
+        ioManager.showBoard(board);
+        if (player != null) {
+            ioManager.showMessage(format(FORMATED_WINNER, WINNER, player.getName(), player.getSign()));
+        }
+        shouldContinue = false;
+    }
+
+    private Player findPlayer(PlayerSignType sign) {
+        if (sign == null) {
+            return null;
+        }
+        for (Player player : players) {
+            if (player.getSign() == sign) {
+                return player;
+            }
+        }
+        return null;
+    }
+
     private void playGame(final List<Player> players) {
-        boolean shouldPlayAgain = true;
+        shouldContinue = true;
         final int boardSize = ioManager.getBoardSize(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         ioManager.showMessage(format(FORMATED_SELECT, SELECTED, boardSize));
-        final Board board = new Board(boardSize);
+
+        //First version (anonymous class)
+//        board = new Board(boardSize, new OnEndGameListener() {
+//            @Override
+//            public void onEndGame(PlayerSignType sign) {
+//                GameManager.this.onEndGame(findPlayer(sign));
+//            }
+//        });
+
+        //Second version (lambda)
+        board = new Board(boardSize, sign -> GameManager.this.onEndGame(findPlayer(sign)));
+
+        //third version (method reference)
+//        board = new Board(boardSize, this::onEndGame);
+
+        //fourth version (implementation of listener)
+//        board = new Board(boardSize, this);
+
         int activePlayerId = getRandomPlayerIndex(NUMBER_OF_PLAYERS);
 
         ioManager.showMessage(DRAWN_PLAYER + "\n" + format(FORMATED_PLAYER, players.get(activePlayerId).getName(), players.get(activePlayerId).getSign()));
@@ -74,20 +114,15 @@ public class GameManager {
             ioManager.showMessage(format(FORMATED_CHOICE, SELECTED, ROW, coordinates.row + 1, COLUMN, coordinates.column + 1));
 
             if (board.insertSign(players.get(activePlayerId).getSign(), coordinates.row, coordinates.column)) {
-                board.addSignValue(coordinates.row, coordinates.column);
-                if (board.checkWinner(coordinates.row, coordinates.column)) {
-                    ioManager.showBoard(board);
-                    ioManager.showMessage(format(FORMATED_WINNER, WINNER, player.getName(), player.getSign()));
-                    shouldPlayAgain = false;
-                }
-                if (board.getCountOfEmptyField() == 0 && shouldPlayAgain) {
-                    ioManager.showBoard(board);
-                    shouldPlayAgain = false;
-                }
                 activePlayerId = ++activePlayerId % NUMBER_OF_PLAYERS;
             } else {
                 ioManager.showMessage(NOT_EMPTY_PLACE);
             }
-        } while (shouldPlayAgain);
+        } while (shouldContinue);
     }
+
+//    @Override
+//    public void onEndGame(PlayerSignType sign) {
+//        GameManager.this.onEndGame(findPlayer(sign));
+//    }
 }
