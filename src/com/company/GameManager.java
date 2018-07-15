@@ -10,6 +10,7 @@ public class GameManager /*implements OnEndGameListener*/ {
     static final int MIN_BOARD_SIZE = 2;
     static final int MAX_BOARD_SIZE = 9;
     private static final int MIN_BOARD_ID = 1;
+    private static final int MIN_PLAYERS = 2;
     private static final int NUMBER_OF_PLAYERS = 2;
     private static final String FORMATED_SELECT = "%s %d \n";
     private static final String FORMATED_CHOICE = "%s %s %d %s %d \n";
@@ -27,7 +28,7 @@ public class GameManager /*implements OnEndGameListener*/ {
         this.ioManager = ioManager;
     }
 
-    public void play() throws TooManyPlayersException {
+    public void play() throws TooManyPlayersException, TooLowPlayersException {
         players = initPlayers(NUMBER_OF_PLAYERS);
         playGame(players);
         ioManager.showMessage(END_OF_THE_GAME);
@@ -38,7 +39,11 @@ public class GameManager /*implements OnEndGameListener*/ {
         return random.nextInt(playerCount);
     }
 
-    public List<Player> initPlayers(final int playersCount) throws TooManyPlayersException {
+    public List<Player> initPlayers(final int playersCount) throws TooManyPlayersException, TooLowPlayersException {
+        if (playersCount < MIN_PLAYERS) {
+            throw new TooLowPlayersException();
+        }
+
         final List<PlayerSignType> sign = new ArrayList<>(Arrays.asList(PlayerSignType.values()));
         sign.remove(PlayerSignType.EMPTY);
 
@@ -55,6 +60,8 @@ public class GameManager /*implements OnEndGameListener*/ {
             players.add(new Player(name, sign.get(i)));
             ioManager.showMessage(format(FORMATED_WELCOME, HELLO, players.get(i).getName(), PLAYING_AS, players.get(i).getSign()));
         }
+
+
         return players;
     }
 
