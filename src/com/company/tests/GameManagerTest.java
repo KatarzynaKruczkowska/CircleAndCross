@@ -6,11 +6,14 @@ import com.company.TooManyPlayersException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito.*;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GameManagerTest {
 
     private GameManager gameManager;
@@ -19,6 +22,7 @@ public class GameManagerTest {
     public void onBefore() {
         gameManager = new GameManager(new IOManagerForTests());
     }
+
 
     @After
     public void onAfter() {
