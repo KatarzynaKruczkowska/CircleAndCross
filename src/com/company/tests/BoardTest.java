@@ -1,6 +1,7 @@
 package com.company.tests;
 
 import com.company.Board;
+import com.company.GameManager;
 import com.company.OnEndGameListener;
 import com.company.PlayerSignType;
 import org.junit.After;
@@ -10,21 +11,32 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 public class BoardTest {
-
+    private int size = 2;
+    private OnEndGameListener mockOnEndGameListener;
     private Board mockBoard;
-    private OnEndGameListener onEndGameMock;
+
 
     @Before
     public void onBefore() {
-        onEndGameMock = mock(OnEndGameListener.class);
-        mockBoard = mock(Board.class(3,onEndGameMock));
+        mockOnEndGameListener = mock(OnEndGameListener.class);
+        mockBoard = mock(Board.class(size,mockOnEndGameListener));
+
     }
 
     @After
     public void onAfter() {
 
+    }
+    @Test
+    public void getSignTextTest(){
+        when(mockBoard.getSignText(2,2).thenReturn("X"));
+
+        verify(mockBoard.getSignText(2,3,)
     }
 
     @Test
