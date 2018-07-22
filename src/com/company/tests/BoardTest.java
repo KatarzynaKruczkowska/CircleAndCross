@@ -1,9 +1,6 @@
 package com.company.tests;
 
-import com.company.Board;
-import com.company.GameManager;
-import com.company.OnEndGameListener;
-import com.company.PlayerSignType;
+import com.company.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,46 +13,49 @@ import static org.mockito.Mockito.when;
 
 
 public class BoardTest {
-    private int size = 2;
     private OnEndGameListener mockOnEndGameListener;
-    private Board mockBoard;
+    private Board board;
 
 
     @Before
     public void onBefore() {
         mockOnEndGameListener = mock(OnEndGameListener.class);
-        mockBoard = mock(Board.class(size,mockOnEndGameListener));
-
+        board = new Board(2, mockOnEndGameListener);
     }
 
     @After
     public void onAfter() {
 
     }
-    @Test
-    public void getSignTextTest(){
-        when(mockBoard.getSignText(2,2).thenReturn("X"));
 
-        verify(mockBoard.getSignText(2,3,)
+    @Test
+    public void getSignTextTest() {
+        //Given
+        board.insertSign(PlayerSignType.X, 1, 1);
+        //When
+        String result = board.getSignText(1, 1);
+
+        //Then
+        //?????????
     }
 
     @Test
     public void insertSignWithNegativeCoordinatesTest() {
-        boolean result = mockBoard.insertSign(PlayerSignType.X, -5, -7);
+        boolean result = board.insertSign(PlayerSignType.X, -5, -7);
 
         assertFalse(result);
     }
 
     @Test
     public void insertSignWithTooBigCoordinatesTest() {
-        boolean result = mockBoard.insertSign(PlayerSignType.X, 5, 7);
+        boolean result = board.insertSign(PlayerSignType.X, 5, 7);
 
         assertFalse(result);
     }
 
     @Test
     public void insertSignWithProperCoordinatesTest() {
-        boolean result = mockBoard.insertSign(PlayerSignType.X, 2, 1);
+        boolean result = board.insertSign(PlayerSignType.X, 2, 1);
 
         assertTrue(result);
     }
