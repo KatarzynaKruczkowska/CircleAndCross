@@ -33,10 +33,10 @@ public class BoardTest {
         //Given
         board.insertSign(PlayerSignType.X, 1, 1);
         //When
-        String result = board.getSignText(1, 1);
+        boolean result = board.getSignText(1,1) == "X";
 
         //Then
-        //?????????
+        assertTrue(result);
     }
 
     @Test
